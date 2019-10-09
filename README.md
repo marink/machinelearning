@@ -2,7 +2,6 @@
 permalink: /index.html
 ---
 
-
 # Javascript Machine Learning
 
 This page will be a common resource for Machine Learning algorithms implemented in the Javascript browser.
