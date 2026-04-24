@@ -1,0 +1,42 @@
+{
+    "name": "marin-learning",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "export": "npm run build && next export --outdir ../../../machinelearning/webapp"
+    },
+    "dependencies": {
+        "@material-ui/core": "latest",
+        "@material-ui/icons": "latest",
+        "dexie": "latest",
+        "next": "^9.2",
+        "react": "latest",
+        "react-dom": "latest",
+        "react-dropzone": "latest",
+        "react-redux": "latest",
+        "react-virtualized": "latest",
+        "redux": "^4.0.4",
+        "redux-devtools-extension": "^2.13.8",
+        "redux-thunk": "^2.3.0"
+    },
+    "devDependencies": {
+        "babel-plugin-root-import": "^6.4.1"
+    },
+    "babel": {
+        "presets": [
+            "next/babel"
+        ],
+        "plugins": [
+            [
+                "babel-plugin-root-import",
+                {
+                    "rootPathSuffix": "./",
+                    "rootPathPrefix": "~/"
+                }
+            ]
+        ]
+    }
+}
