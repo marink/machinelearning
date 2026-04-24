@@ -47,6 +47,8 @@ export default function Home() {
             machinelearning.js.org
           </Typography>
           <Button color="inherit" component={Link} href="/explorer/">Explorer</Button>
+          <Button color="inherit" component={Link} href="/docs/">Docs</Button>
+          <Button color="inherit" component={Link} href="/about/">About</Button>
           <Button
             color="inherit"
             href="https://github.com/marink/machinelearning"
