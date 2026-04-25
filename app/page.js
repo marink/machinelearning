@@ -42,29 +42,34 @@ const features = [
 export default function Home() {
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <AppBar position="static" elevation={0}>
-        <Toolbar>
-          <Typography variant="h6" sx={{ fontWeight: 700, flexGrow: 1, letterSpacing: '-0.5px' }}>
-            machinelearning.js.org
-          </Typography>
-          <Button color="inherit" component={Link} href="/explorer/">Explorer</Button>
-          <Button color="inherit" component={Link} href="/docs/">Docs</Button>
-          <Button color="inherit" component={Link} href="/about/">About</Button>
-          <Button
-            color="inherit"
-            href="https://github.com/marink/machinelearning"
-            target="_blank"
-            startIcon={<GitHubIcon />}
-          >
-            GitHub
-          </Button>
-        </Toolbar>
-      </AppBar>
-
-      {/* Hero */}
-      <Box sx={{ position: 'relative', color: '#fff', py: 12, px: 2, textAlign: 'center', overflow: 'hidden', minHeight: 420 }}>
+      {/* Hero + AppBar share the neural canvas */}
+      <Box sx={{ position: 'relative', color: '#fff', overflow: 'hidden', minHeight: 520 }}>
         <NeuralBackground />
-        <Box sx={{ position: 'relative', zIndex: 1 }}>
+
+        <AppBar position="relative" elevation={0} sx={{
+          bgcolor: 'transparent',
+          backgroundImage: 'none',
+          boxShadow: 'none',
+        }}>
+          <Toolbar>
+            <Typography variant="h6" sx={{ fontWeight: 700, flexGrow: 1, letterSpacing: '-0.5px' }}>
+              machinelearning.js.org
+            </Typography>
+            <Button color="inherit" component={Link} href="/explorer/">Explorer</Button>
+            <Button color="inherit" component={Link} href="/docs/">Docs</Button>
+            <Button color="inherit" component={Link} href="/about/">About</Button>
+            <Button
+              color="inherit"
+              href="https://github.com/marink/machinelearning"
+              target="_blank"
+              startIcon={<GitHubIcon />}
+            >
+              GitHub
+            </Button>
+          </Toolbar>
+        </AppBar>
+
+        <Box sx={{ position: 'relative', zIndex: 1, py: 10, px: 2, textAlign: 'center' }}>
         <Typography variant="h3" fontWeight={800} gutterBottom>
           Machine Learning in your Browser
         </Typography>
