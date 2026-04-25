@@ -12,6 +12,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import Link from 'next/link';
 import { autoparse } from '@lib/parser';
 import PreprocessTab from './PreprocessTab';
+import DataTab from './DataTab';
 import ClassifyTab from './ClassifyTab';
 import ClusterTab from './ClusterTab';
 import VisualizeTab from './VisualizeTab';
@@ -65,7 +66,7 @@ export default function ExplorerShell() {
     if (file) loadFile(file);
   }
 
-  const tabs = ['Preprocess', 'Classify', 'Cluster', 'Visualize'];
+  const tabs = ['Preprocess', 'Data', 'Classify', 'Cluster', 'Visualize'];
 
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -138,9 +139,10 @@ export default function ExplorerShell() {
           </Box>
         )}
         {tab === 0 && <PreprocessTab dataset={dataset} />}
-        {tab === 1 && <ClassifyTab dataset={dataset} />}
-        {tab === 2 && <ClusterTab dataset={dataset} />}
-        {tab === 3 && <VisualizeTab dataset={dataset} />}
+        {tab === 1 && <DataTab dataset={dataset} />}
+        {tab === 2 && <ClassifyTab dataset={dataset} />}
+        {tab === 3 && <ClusterTab dataset={dataset} />}
+        {tab === 4 && <VisualizeTab dataset={dataset} />}
       </Box>
     </Box>
   );

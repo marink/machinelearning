@@ -141,9 +141,20 @@ export default function Home() {
         </Box>
       </Container>
 
-      <Box sx={{ py: 3, textAlign: 'center', bgcolor: '#004D40', color: 'rgba(255,255,255,0.6)' }}>
-        <Typography variant="caption">
-          machinelearning.js.org · open source · MIT
+      <Box sx={{
+        py: 4,
+        textAlign: 'center',
+        bgcolor: '#F5F5F7',
+        borderTop: '1px solid #D2D2D7',
+      }}>
+        <Typography sx={{ fontSize: 12, color: '#6E6E73' }}>
+          Copyright © 2025 MachineLearning.js · Open source · MIT License
+        </Typography>
+        <Typography sx={{ fontSize: 12, color: '#6E6E73', mt: 0.5 }}>
+          Inspired by{' '}
+          <a href="https://ml.cms.waikato.ac.nz/weka/" target="_blank" rel="noreferrer"
+            style={{ color: '#6E6E73', textDecoration: 'underline' }}>Weka</a>
+          {' '}from the University of Waikato
         </Typography>
       </Box>
     </Box>
