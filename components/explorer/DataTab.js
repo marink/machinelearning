@@ -40,7 +40,7 @@ export default function DataTab({ dataset }) {
           <Box component="span" sx={{
             fontFamily: attr.type === 'numeric' ? 'monospace' : 'inherit',
             fontWeight: isClass ? 600 : 400,
-            color: isClass ? '#00695C' : 'inherit',
+            color: isClass ? '#1565C0' : 'inherit',
             fontSize: 13,
           }}>
             {val === null || val === undefined || val === '' ? (
@@ -79,7 +79,7 @@ export default function DataTab({ dataset }) {
     },
     muiTableContainerProps: { sx: { maxHeight: 'calc(100vh - 220px)' } },
     muiTableHeadCellProps: {
-      sx: { bgcolor: '#E0F2F1', fontWeight: 700, fontSize: 13, py: 1 },
+      sx: { bgcolor: '#E3F0FF', fontWeight: 700, fontSize: 13, py: 1 },
     },
     muiTableBodyRowProps: ({ row }) => ({
       sx: { '&:hover td': { bgcolor: '#F1F8F7' } },

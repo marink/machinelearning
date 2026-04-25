@@ -40,7 +40,7 @@ export default function AboutPage() {
             display: 'flex', alignItems: 'center', gap: 0.75,
             textDecoration: 'none', flexGrow: 1,
           }}>
-            <ScienceIcon sx={{ fontSize: 17, color: '#00796B' }} />
+            <ScienceIcon sx={{ fontSize: 17, color: '#1565C0' }} />
             <Typography sx={{ fontSize: 15, fontWeight: 600, color: '#1d1d1f', letterSpacing: '-0.01em' }}>
               MachineLearning.js
             </Typography>
@@ -117,7 +117,7 @@ export default function AboutPage() {
                   'Provides an introduction to the Weka workbench with links to algorithm implementations.',
                 ].map(f => (
                   <Typography key={f} sx={{ fontSize: 15, color: 'rgba(0,0,0,0.6)', pl: 1.5,
-                    '&::before': { content: '"·"', mr: 1, color: '#00796B', fontWeight: 700 } }}>
+                    '&::before': { content: '"·"', mr: 1, color: '#1565C0', fontWeight: 700 } }}>
                     {f}
                   </Typography>
                 ))}
@@ -130,7 +130,7 @@ export default function AboutPage() {
                 size="small"
                 href="https://www.cs.waikato.ac.nz/ml/weka/book.html"
                 target="_blank"
-                sx={{ fontSize: 13, color: '#00796B', borderColor: '#00796B', textTransform: 'none' }}
+                sx={{ fontSize: 13, color: '#1565C0', borderColor: '#1565C0', textTransform: 'none' }}
               >
                 Book web site
               </Button>

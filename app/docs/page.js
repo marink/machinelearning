@@ -117,7 +117,7 @@ export default function DocsPage() {
             display: 'flex', alignItems: 'center', gap: 0.75,
             textDecoration: 'none', mr: 2,
           }}>
-            <ScienceIcon sx={{ fontSize: 18, color: '#00796B' }} />
+            <ScienceIcon sx={{ fontSize: 18, color: '#1565C0' }} />
             <Typography sx={{ fontSize: 15, fontWeight: 600, color: '#1d1d1f', letterSpacing: '-0.01em' }}>
               MachineLearning.js
             </Typography>
@@ -170,7 +170,7 @@ export default function DocsPage() {
                 '&:hover': { bgcolor: 'rgba(0,0,0,0.05)' },
               }}
             >
-              <ListItemIcon sx={{ minWidth: 32, color: '#00796B' }}>{s.icon}</ListItemIcon>
+              <ListItemIcon sx={{ minWidth: 32, color: '#1565C0' }}>{s.icon}</ListItemIcon>
               {open && (
                 <ListItemText
                   primary={s.label}
@@ -212,7 +212,7 @@ export default function DocsPage() {
             <Para>
               The algorithms and evaluation methods follow the descriptions in{' '}
               <a href="https://www.cs.waikato.ac.nz/~ml/book" target="_blank" rel="noreferrer"
-                style={{ color: '#00796B' }}>
+                style={{ color: '#1565C0' }}>
                 Data Mining: Practical Machine Learning Tools and Techniques
               </a>{' '}
               by Witten, Frank, Hall &amp; Pal (University of Waikato). The ARFF file format is Weka&apos;s own invention.
@@ -357,7 +357,7 @@ Nominal attributes: frequency counts with Laplace smoothing
               <code style={{ fontFamily: 'monospace', fontSize: 14 }}>?</code>. For the full specification
               see{' '}
               <a href="https://www.cs.waikato.ac.nz/ml/weka/arff.html" target="_blank" rel="noreferrer"
-                style={{ color: '#00796B' }}>waikato.ac.nz/ml/weka/arff.html</a>.
+                style={{ color: '#1565C0' }}>waikato.ac.nz/ml/weka/arff.html</a>.
             </Para>
             <Alert severity="info" sx={{ fontSize: 15 }}>
               Sample datasets (<code>iris.arff</code>, <code>weather.arff</code>) are available in the

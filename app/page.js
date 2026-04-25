@@ -2,7 +2,7 @@
 
 import {
   Box, AppBar, Toolbar, Typography, Button, Container,
-  Grid, Card, CardContent, CardActionArea, Chip, Stack,
+  Card, CardContent, CardActionArea, Chip, Stack,
 } from '@mui/material';
 import ScienceIcon from '@mui/icons-material/Science';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
@@ -14,25 +14,25 @@ import NeuralBackground from '@components/NeuralBackground';
 
 const features = [
   {
-    icon: <ScienceIcon sx={{ fontSize: 40, color: '#00897B' }} />,
+    icon: <ScienceIcon sx={{ fontSize: 40, color: '#1565C0' }} />,
     title: 'Preprocess',
     desc: 'Upload CSV or ARFF datasets. Inspect attribute statistics, distributions, and missing values instantly.',
     href: '/explorer/',
   },
   {
-    icon: <AccountTreeIcon sx={{ fontSize: 40, color: '#00897B' }} />,
+    icon: <AccountTreeIcon sx={{ fontSize: 40, color: '#1565C0' }} />,
     title: 'Classify',
     desc: 'Run k-NN and Naïve Bayes classifiers. Evaluate with cross-validation or a percentage hold-out split.',
     href: '/explorer/',
   },
   {
-    icon: <BubbleChartIcon sx={{ fontSize: 40, color: '#00897B' }} />,
+    icon: <BubbleChartIcon sx={{ fontSize: 40, color: '#1565C0' }} />,
     title: 'Cluster',
     desc: 'Discover structure with k-Means. Visualize cluster assignments and within-cluster variance.',
     href: '/explorer/',
   },
   {
-    icon: <BarChartIcon sx={{ fontSize: 40, color: '#00897B' }} />,
+    icon: <BarChartIcon sx={{ fontSize: 40, color: '#1565C0' }} />,
     title: 'Visualize',
     desc: 'Explore your data with interactive 2-D scatter plots — select any two attributes and colour by class.',
     href: '/explorer/',
@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Hero + AppBar share the neural canvas */}
-      <Box sx={{ position: 'relative', color: '#fff', overflow: 'hidden', minHeight: 520 }}>
+      <Box sx={{ position: 'relative', color: '#fff', overflow: 'hidden', minHeight: 600, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <NeuralBackground />
 
         <AppBar position="fixed" elevation={0} sx={{
@@ -72,21 +72,21 @@ export default function Home() {
           </Toolbar>
         </AppBar>
 
-        <Box sx={{ position: 'relative', zIndex: 1, pt: '44px', py: 10, px: 2, textAlign: 'center' }}>
-        <Typography variant="h3" fontWeight={800} gutterBottom>
-          Machine Learning in your Browser
+        <Box sx={{ position: 'relative', zIndex: 1, mt: 'calc(10vh + 30px)', pb: 6, px: 2, textAlign: 'center' }}>
+        <Typography variant="h3" fontWeight={800} gutterBottom sx={{ mt: '30px' }}>
+          Machine Learning in JavaScript
         </Typography>
-        <Typography variant="h6" sx={{ opacity: 0.85, maxWidth: 600, mx: 'auto', mb: 4 }}>
+        <Typography variant="h6" sx={{ opacity: 0.85, maxWidth: 600, mx: 'auto', mb: 7 }}>
           A JavaScript reimagining of Weka — load a dataset, train a model, and read the results.
           Nothing to install. Everything runs locally.
         </Typography>
-        <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap">
+        <Stack direction="row" spacing={2} justifyContent="flex-start" flexWrap="wrap" sx={{ px: '10vw', mt: '40px' }}>
           <Button
             variant="contained"
             size="large"
             component={Link}
             href="/explorer/"
-            sx={{ bgcolor: '#00897B', '&:hover': { bgcolor: '#00695C' } }}
+            sx={{ bgcolor: '#1565C0', '&:hover': { bgcolor: '#0D47A1' } }}
           >
             Open Explorer
           </Button>
@@ -100,7 +100,7 @@ export default function Home() {
             Witten &amp; Frank Book
           </Button>
         </Stack>
-        <Stack direction="row" spacing={1} justifyContent="center" sx={{ mt: 4 }} flexWrap="wrap">
+        <Stack direction="row" spacing={1} justifyContent="flex-start" sx={{ mt: 3, px: '10vw' }} flexWrap="wrap">
           {['k-NN','Naïve Bayes','k-Means','ARFF','CSV','Zero Install'].map(t => (
             <Chip key={t} label={t} size="small"
               sx={{ bgcolor: 'rgba(255,255,255,0.15)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }} />
@@ -110,29 +110,27 @@ export default function Home() {
       </Box>
 
       {/* Feature cards */}
-      <Container maxWidth="lg" sx={{ py: 8, flexGrow: 1 }}>
-        <Grid container spacing={3}>
+      <Container maxWidth="md" sx={{ py: 8, px: { xs: 3, sm: 5, md: 6 }, flexGrow: 1 }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' }, gap: 3 }}>
           {features.map(f => (
-            <Grid item xs={12} sm={6} md={3} key={f.title}>
-              <Card sx={{ height: '100%', '&:hover': { boxShadow: 4 }, transition: 'box-shadow 0.2s' }}>
-                <CardActionArea component={Link} href={f.href} sx={{ height: '100%', p: 1 }}>
-                  <CardContent>
-                    <Box mb={1}>{f.icon}</Box>
-                    <Typography variant="h6" fontWeight={700} gutterBottom>{f.title}</Typography>
-                    <Typography variant="body2" color="text.secondary">{f.desc}</Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
+            <Card key={f.title} sx={{ '&:hover': { boxShadow: 4 }, transition: 'box-shadow 0.2s' }}>
+              <CardActionArea component={Link} href={f.href} sx={{ height: '100%', p: 1 }}>
+                <CardContent>
+                  <Box mb={1}>{f.icon}</Box>
+                  <Typography variant="h6" fontWeight={700} gutterBottom>{f.title}</Typography>
+                  <Typography variant="body2" color="text.secondary">{f.desc}</Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
           ))}
-        </Grid>
+        </Box>
 
         {/* Inspired by */}
         <Box sx={{ mt: 8, textAlign: 'center', opacity: 0.7 }}>
           <Typography variant="body2">
             Inspired by{' '}
             <a href="https://ml.cms.waikato.ac.nz/weka/" target="_blank" rel="noreferrer"
-               style={{ color: '#00796B' }}>
+               style={{ color: '#1565C0' }}>
               Weka 3
             </a>{' '}
             from the University of Waikato and the book{' '}

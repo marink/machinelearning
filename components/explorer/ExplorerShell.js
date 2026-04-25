@@ -102,7 +102,7 @@ export default function ExplorerShell() {
 
       {/* Dataset status bar */}
       {(dataset || error) && (
-        <Box sx={{ px: 2, py: 0.5, bgcolor: error ? '#FFEBEE' : '#E0F2F1', borderBottom: '1px solid', borderColor: error ? '#EF9A9A' : '#B2DFDB' }}>
+        <Box sx={{ px: 2, py: 0.5, bgcolor: error ? '#FFEBEE' : '#E3F0FF', borderBottom: '1px solid', borderColor: error ? '#EF9A9A' : '#BBDEFB' }}>
           {error
             ? <Typography variant="caption" color="error">{error}</Typography>
             : (

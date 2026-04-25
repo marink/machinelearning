@@ -33,11 +33,11 @@ export default function NeuralBackground() {
     function draw() {
       const { width, height } = canvas;
 
-      /* deep navy → dark teal gradient */
+      /* deep navy → dark blue gradient */
       const grad = ctx.createLinearGradient(0, 0, width, height);
-      grad.addColorStop(0, '#060d1f');
-      grad.addColorStop(0.5, '#0a2a2a');
-      grad.addColorStop(1, '#002d26');
+      grad.addColorStop(0, '#04091a');
+      grad.addColorStop(0.5, '#0a1535');
+      grad.addColorStop(1, '#0d1e4a');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
@@ -60,7 +60,7 @@ export default function NeuralBackground() {
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(0, 210, 170, ${alpha})`;
+            ctx.strokeStyle = `rgba(56, 152, 255, ${alpha})`;
             ctx.lineWidth = 0.7;
             ctx.stroke();
           }
@@ -71,8 +71,8 @@ export default function NeuralBackground() {
       for (const n of nodes) {
         /* outer glow */
         const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 4);
-        glow.addColorStop(0, 'rgba(0, 210, 170, 0.25)');
-        glow.addColorStop(1, 'rgba(0, 210, 170, 0)');
+        glow.addColorStop(0, 'rgba(56, 152, 255, 0.25)');
+        glow.addColorStop(1, 'rgba(56, 152, 255, 0)');
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r * 4, 0, Math.PI * 2);
         ctx.fillStyle = glow;
@@ -81,7 +81,7 @@ export default function NeuralBackground() {
         /* solid core */
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 230, 185, 0.85)';
+        ctx.fillStyle = 'rgba(100, 180, 255, 0.9)';
         ctx.fill();
       }
 

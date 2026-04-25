@@ -8,7 +8,7 @@ const theme = createTheme({
     fontSize: 14,
   },
   palette: {
-    primary:    { main: '#00796B' },
+    primary:    { main: '#1565C0' },
     secondary:  { main: '#F57F17' },
     background: { default: '#F5F5F5', paper: '#FFFFFF' },
   },
@@ -16,7 +16,7 @@ const theme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: '#004D40',
+          backgroundColor: '#0d1b4a',
           backgroundImage: "url('/images/header.png')",
           backgroundSize: 'auto 100%',
           backgroundRepeat: 'repeat-x',
