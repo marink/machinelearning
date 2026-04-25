@@ -225,38 +225,59 @@ Nominal attributes: frequency counts with Laplace smoothing
 
           <Section id="arff" title="ARFF File Format">
             <Para>
-              ARFF (Attribute-Relation File Format) is a plain-text format developed by the University of
-              Waikato for use with Weka. It is the native format for this tool.
+              The Attribute-Relation File Format (ARFF) is an ASCII text file that describes a list of
+              instances sharing a set of attributes. ARFF files were developed by the Machine Learning
+              Project at the Department of Computer Science of the University of Waikato for use with the
+              Weka machine learning software.
+            </Para>
+            <Para>
+              An ARFF file has two distinct sections: the <strong>Header</strong> (relation name and
+              attribute declarations) followed by the <strong>Data</strong> section.
             </Para>
             <Typography variant="subtitle2" fontWeight={700} gutterBottom>Structure</Typography>
-            <Code>{`@relation iris
+            <Code>{`% 1. Title: Iris Plants Database
+% Creator: R.A. Fisher
 
-@attribute sepallength numeric
-@attribute sepalwidth  numeric
-@attribute petallength numeric
-@attribute petalwidth  numeric
-@attribute class       {Iris-setosa,Iris-versicolor,Iris-virginica}
+@relation iris
+
+@attribute sepallength  numeric
+@attribute sepalwidth   numeric
+@attribute petallength  numeric
+@attribute petalwidth   numeric
+@attribute class        {Iris-setosa,Iris-versicolor,Iris-virginica}
 
 @data
 5.1,3.5,1.4,0.2,Iris-setosa
 4.9,3.0,1.4,0.2,Iris-setosa
+4.7,3.2,1.3,0.2,Iris-setosa
 ...`}</Code>
             <Typography variant="subtitle2" fontWeight={700} gutterBottom>Attribute types</Typography>
             <Box sx={{ mb: 1 }}>
               <Chip label="numeric" size="small" sx={{ mr: 1 }} />
-              <Typography variant="body2" component="span" color="text.secondary">Continuous values.</Typography>
+              <Typography variant="body2" component="span" color="text.secondary">Continuous real-valued attributes.</Typography>
             </Box>
             <Box sx={{ mb: 1 }}>
               <Chip label="{v1,v2,...}" size="small" sx={{ mr: 1 }} />
-              <Typography variant="body2" component="span" color="text.secondary">Nominal (categorical) values — used for the class attribute.</Typography>
+              <Typography variant="body2" component="span" color="text.secondary">Nominal (categorical) — lists all possible values. Used for the class attribute.</Typography>
+            </Box>
+            <Box sx={{ mb: 1 }}>
+              <Chip label="string" size="small" sx={{ mr: 1 }} />
+              <Typography variant="body2" component="span" color="text.secondary">Free-form string values. Treated as nominal in this tool.</Typography>
             </Box>
             <Box sx={{ mb: 2 }}>
-              <Chip label="string" size="small" sx={{ mr: 1 }} />
-              <Typography variant="body2" component="span" color="text.secondary">Treated as nominal in this tool.</Typography>
+              <Chip label="date" size="small" sx={{ mr: 1 }} />
+              <Typography variant="body2" component="span" color="text.secondary">Date/time values (ISO-8601 format). Parsed as numeric timestamps.</Typography>
             </Box>
+            <Para>
+              Lines beginning with <code>%</code> are comments and are ignored. Missing values are
+              represented by <code>?</code> in the data section. Attribute names and string values
+              containing spaces must be quoted.
+            </Para>
             <Alert severity="info">
               Sample datasets (<code>iris.arff</code>, <code>weather.arff</code>) are available directly
-              in the Explorer via the <strong>Sample</strong> button.
+              in the Explorer via the <strong>Sample</strong> button. For the full ARFF specification see{' '}
+              <a href="https://www.cs.waikato.ac.nz/ml/weka/arff.html" target="_blank" rel="noreferrer"
+                style={{ color: '#00796B' }}>waikato.ac.nz/ml/weka/arff.html</a>.
             </Alert>
           </Section>
 

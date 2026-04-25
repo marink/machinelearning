@@ -53,12 +53,11 @@ export default function AboutPage() {
           <Box sx={{ flexShrink: 0 }}>
             <a href="https://www.cs.waikato.ac.nz/~ml/book" target="_blank" rel="noreferrer">
               <Image
-                src="https://www.cs.waikato.ac.nz/~ml/images/Book4thEd.jpg"
+                src="/images/weka-book-cover-4e.jpg"
                 alt="Data Mining: Practical Machine Learning Tools and Techniques — 4th Edition"
                 width={120}
                 height={160}
                 style={{ display: 'block', borderRadius: 4, boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}
-                unoptimized
               />
             </a>
           </Box>
@@ -70,18 +69,32 @@ export default function AboutPage() {
               Witten, Frank, Hall &amp; Pal · 4th Edition · University of Waikato
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
-              The algorithms implemented here follow the descriptions in this book — from the k-NN
-              classifier to k-Means clustering and Naïve Bayes. The ARFF file format used for
-              datasets is also Weka&apos;s invention.
+              This site implements algorithms described in this book — from k-NN and Naïve Bayes
+              classification to k-Means clustering. It also generates useful statistics about the
+              datasets uploaded to the browser, including attribute distributions and missing value
+              counts. The ARFF file format used for datasets is Weka&apos;s own invention.
             </Typography>
+            <Stack spacing={0.5} sx={{ mt: 2 }}>
+              {[
+                'Explains how machine learning algorithms for data mining work.',
+                'Helps compare and evaluate results from different techniques.',
+                'Covers performance improvement including input preprocessing.',
+                'Features in-depth information on probabilistic models.',
+                'Introduces the Weka workbench with links to algorithm implementations.',
+              ].map(f => (
+                <Typography key={f} variant="body2" color="text.secondary" sx={{ '&::before': { content: '"· "' } }}>
+                  {f}
+                </Typography>
+              ))}
+            </Stack>
             <Button
               variant="outlined"
               size="small"
-              href="https://www.cs.waikato.ac.nz/~ml/book"
+              href="https://www.cs.waikato.ac.nz/ml/weka/book.html"
               target="_blank"
               sx={{ mt: 2, color: '#00796B', borderColor: '#00796B' }}
             >
-              Learn more
+              Book web site
             </Button>
           </Box>
         </Stack>
