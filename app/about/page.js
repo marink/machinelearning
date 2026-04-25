@@ -42,7 +42,7 @@ export default function AboutPage() {
           }}>
             <ScienceIcon sx={{ fontSize: 17, color: '#00796B' }} />
             <Typography sx={{ fontSize: 15, fontWeight: 600, color: '#1d1d1f', letterSpacing: '-0.01em' }}>
-              machinelearning.js
+              MachineLearning.js
             </Typography>
           </Box>
 

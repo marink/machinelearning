@@ -5,7 +5,7 @@ import theme from '@theme';
 import './globals.css';
 
 export const metadata = {
-  title: 'machinelearning.js.org',
+  title: 'MachineLearning.js',
   description: 'Machine learning algorithms running entirely in your browser — no install required.',
   metadataBase: new URL('https://machinelearning.js.org'),
 };

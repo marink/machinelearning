@@ -1,7 +1,7 @@
 import ExplorerShell from '@components/explorer/ExplorerShell';
 
 export const metadata = {
-  title: 'Explorer — machinelearning.js.org',
+  title: 'Explorer — MachineLearning.js',
 };
 
 export default function ExplorerPage() {

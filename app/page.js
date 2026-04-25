@@ -47,13 +47,15 @@ export default function Home() {
         <NeuralBackground />
 
         <AppBar position="relative" elevation={0} sx={{
-          bgcolor: 'transparent',
+          bgcolor: 'rgba(0,0,0,0.18)',
           backgroundImage: 'none',
           boxShadow: 'none',
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)',
         }}>
-          <Toolbar>
+          <Toolbar variant="dense" sx={{ minHeight: '44px !important' }}>
             <Typography variant="h6" sx={{ fontWeight: 700, flexGrow: 1, letterSpacing: '-0.5px' }}>
-              machinelearning.js.org
+              MachineLearning.js
             </Typography>
             <Button color="inherit" component={Link} href="/explorer/">Explorer</Button>
             <Button color="inherit" component={Link} href="/docs/">Docs</Button>

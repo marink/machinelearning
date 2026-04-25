@@ -119,7 +119,7 @@ export default function DocsPage() {
           }}>
             <ScienceIcon sx={{ fontSize: 18, color: '#00796B' }} />
             <Typography sx={{ fontSize: 15, fontWeight: 600, color: '#1d1d1f', letterSpacing: '-0.01em' }}>
-              machinelearning.js
+              MachineLearning.js
             </Typography>
           </Box>
 
@@ -205,7 +205,7 @@ export default function DocsPage() {
 
           <Section id="overview" title="Overview">
             <Para>
-              machinelearning.js.org implements a selection of classic supervised and unsupervised machine
+              MachineLearning.js.org implements a selection of classic supervised and unsupervised machine
               learning algorithms entirely in JavaScript — no server, no dependencies beyond what ships with
               the app. Every computation happens in your browser.
             </Para>
