@@ -10,6 +10,7 @@ import BubbleChartIcon from '@mui/icons-material/BubbleChart';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import Link from 'next/link';
+import NeuralBackground from '@components/NeuralBackground';
 
 const features = [
   {
@@ -61,7 +62,9 @@ export default function Home() {
       </AppBar>
 
       {/* Hero */}
-      <Box sx={{ bgcolor: '#004D40', color: '#fff', py: 10, px: 2, textAlign: 'center' }}>
+      <Box sx={{ position: 'relative', color: '#fff', py: 12, px: 2, textAlign: 'center', overflow: 'hidden', minHeight: 420 }}>
+        <NeuralBackground />
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
         <Typography variant="h3" fontWeight={800} gutterBottom>
           Machine Learning in your Browser
         </Typography>
@@ -95,6 +98,7 @@ export default function Home() {
               sx={{ bgcolor: 'rgba(255,255,255,0.15)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }} />
           ))}
         </Stack>
+        </Box>
       </Box>
 
       {/* Feature cards */}
