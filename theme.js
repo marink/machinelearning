@@ -15,7 +15,12 @@ const theme = createTheme({
   components: {
     MuiAppBar: {
       styleOverrides: {
-        root: { backgroundColor: '#004D40' },
+        root: {
+          backgroundColor: '#004D40',
+          backgroundImage: "url('/images/header.png')",
+          backgroundSize: 'auto 100%',
+          backgroundRepeat: 'repeat-x',
+        },
       },
     },
     MuiTab: {

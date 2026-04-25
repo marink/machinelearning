@@ -8,7 +8,6 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import HomeIcon from '@mui/icons-material/Home';
 import ScienceIcon from '@mui/icons-material/Science';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
@@ -18,21 +17,40 @@ import InfoIcon from '@mui/icons-material/Info';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import Link from 'next/link';
 
-const DRAWER_WIDTH = 220;
-const MINI_WIDTH = 56;
+const DRAWER_WIDTH = 240;
+const MINI_WIDTH = 52;
+
+/* Apple-style nav link */
+const NAV_LINK = {
+  fontSize: 13,
+  fontWeight: 500,
+  color: 'rgba(44,44,44,0.8)',
+  textDecoration: 'none',
+  mx: 1.5,
+  '&:hover': { color: '#000' },
+};
 
 const sections = [
-  { id: 'overview',    label: 'Overview',       icon: <InfoIcon /> },
-  { id: 'knn',         label: 'k-NN',           icon: <AccountTreeIcon /> },
-  { id: 'naivebayes',  label: 'Naïve Bayes',    icon: <ScienceIcon /> },
-  { id: 'kmeans',      label: 'k-Means',        icon: <BubbleChartIcon /> },
-  { id: 'arff',        label: 'ARFF Format',    icon: <InsertDriveFileIcon /> },
-  { id: 'csv',         label: 'CSV Format',     icon: <TableChartIcon /> },
+  { id: 'overview',   label: 'Overview',    icon: <InfoIcon fontSize="small" /> },
+  { id: 'knn',        label: 'k-NN',        icon: <AccountTreeIcon fontSize="small" /> },
+  { id: 'naivebayes', label: 'Naïve Bayes', icon: <ScienceIcon fontSize="small" /> },
+  { id: 'kmeans',     label: 'k-Means',     icon: <BubbleChartIcon fontSize="small" /> },
+  { id: 'arff',       label: 'ARFF Format', icon: <InsertDriveFileIcon fontSize="small" /> },
+  { id: 'csv',        label: 'CSV Format',  icon: <TableChartIcon fontSize="small" /> },
 ];
 
 function Code({ children }) {
   return (
-    <Paper variant="outlined" sx={{ p: 2, my: 2, fontFamily: 'monospace', fontSize: 13, bgcolor: '#F5F5F5', whiteSpace: 'pre', overflowX: 'auto' }}>
+    <Paper variant="outlined" sx={{
+      p: 2, my: 2,
+      fontFamily: '"SF Mono", ui-monospace, Menlo, monospace',
+      fontSize: 13,
+      bgcolor: '#F5F5F7',
+      whiteSpace: 'pre',
+      overflowX: 'auto',
+      borderColor: 'rgba(0,0,0,0.1)',
+      borderRadius: 2,
+    }}>
       {children}
     </Paper>
   );
@@ -40,16 +58,30 @@ function Code({ children }) {
 
 function Section({ id, title, children }) {
   return (
-    <Box id={id} sx={{ mb: 6 }}>
-      <Typography variant="h5" fontWeight={700} gutterBottom>{title}</Typography>
-      <Divider sx={{ mb: 3 }} />
+    <Box id={id} sx={{ mb: 7, scrollMarginTop: '80px' }}>
+      <Typography sx={{ fontSize: 28, fontWeight: 600, letterSpacing: '-0.02em', mb: 1 }}>
+        {title}
+      </Typography>
+      <Divider sx={{ mb: 3, borderColor: 'rgba(0,0,0,0.1)' }} />
       {children}
     </Box>
   );
 }
 
 function Para({ children }) {
-  return <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>{children}</Typography>;
+  return (
+    <Typography sx={{ fontSize: 17, lineHeight: 1.7, color: 'rgba(0,0,0,0.7)', mb: 2 }}>
+      {children}
+    </Typography>
+  );
+}
+
+function SubHead({ children }) {
+  return (
+    <Typography sx={{ fontSize: 15, fontWeight: 600, color: '#1d1d1f', mb: 1, mt: 2 }}>
+      {children}
+    </Typography>
+  );
 }
 
 export default function DocsPage() {
@@ -60,30 +92,59 @@ export default function DocsPage() {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <AppBar position="fixed" elevation={0} sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>
-        <Toolbar>
-          <IconButton color="inherit" onClick={() => setOpen(o => !o)} edge="start" sx={{ mr: 1 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#fff' }}>
+
+      {/* Apple-style frosted glass AppBar */}
+      <AppBar position="fixed" elevation={0} sx={{
+        bgcolor: 'rgba(255, 255, 255, 0.65)',
+        backdropFilter: 'saturate(180%) blur(16px)',
+        WebkitBackdropFilter: 'saturate(180%) blur(16px)',
+        borderBottom: '1px solid rgba(0,0,0,0.1)',
+        color: 'rgba(0,0,0,0.8)',
+        zIndex: theme => theme.zIndex.drawer + 1,
+        backgroundImage: 'none',
+      }}>
+        <Toolbar variant="dense" sx={{ maxWidth: 980 + DRAWER_WIDTH, width: '100%', mx: 'auto', px: { xs: 2, sm: 3 }, minHeight: '44px !important' }}>
+          <IconButton
+            onClick={() => setOpen(o => !o)}
+            edge="start"
+            sx={{ mr: 1, color: 'rgba(44,44,44,0.8)' }}
+          >
             {open ? <ChevronLeftIcon /> : <MenuIcon />}
           </IconButton>
-          <ScienceIcon sx={{ mr: 1 }} />
-          <Typography variant="h6" sx={{ fontWeight: 700, flexGrow: 1, letterSpacing: '-0.5px' }}>
-            machinelearning.js.org
-          </Typography>
-          <Button color="inherit" component={Link} href="/" startIcon={<HomeIcon />}>Home</Button>
-          <Button color="inherit" component={Link} href="/explorer/">Explorer</Button>
-          <Button color="inherit" component={Link} href="/about/">About</Button>
-          <Button
-            color="inherit"
-            href="https://github.com/marink/machinelearning"
-            target="_blank"
-            startIcon={<GitHubIcon />}
-          >
-            GitHub
-          </Button>
+
+          <Box component={Link} href="/" sx={{
+            display: 'flex', alignItems: 'center', gap: 0.75,
+            textDecoration: 'none', mr: 2,
+          }}>
+            <ScienceIcon sx={{ fontSize: 18, color: '#00796B' }} />
+            <Typography sx={{ fontSize: 15, fontWeight: 600, color: '#1d1d1f', letterSpacing: '-0.01em' }}>
+              machinelearning.js
+            </Typography>
+          </Box>
+
+          <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center' }}>
+            {[
+              { label: 'Home',     href: '/' },
+              { label: 'Explorer', href: '/explorer/' },
+              { label: 'About',    href: '/about/' },
+            ].map(({ label, href }) => (
+              <Box key={label} component={Link} href={href} sx={NAV_LINK}>{label}</Box>
+            ))}
+            <Box
+              component="a"
+              href="https://github.com/marink/machinelearning"
+              target="_blank"
+              rel="noreferrer"
+              sx={{ ...NAV_LINK, display: 'flex', alignItems: 'center', gap: 0.5 }}
+            >
+              <GitHubIcon sx={{ fontSize: 16 }} /> GitHub
+            </Box>
+          </Box>
         </Toolbar>
       </AppBar>
 
+      {/* Sidebar */}
       <Drawer
         variant="permanent"
         sx={{
@@ -93,32 +154,54 @@ export default function DocsPage() {
             width: open ? DRAWER_WIDTH : MINI_WIDTH,
             overflowX: 'hidden',
             transition: 'width 0.2s',
-            mt: '64px',
+            mt: '44px',
             borderRight: '1px solid rgba(0,0,0,0.08)',
+            bgcolor: '#FAFAFA',
           },
         }}
       >
-        <List dense>
+        <List dense sx={{ pt: 2 }}>
           {sections.map(s => (
-            <ListItemButton key={s.id} onClick={() => scrollTo(s.id)} sx={{ py: 1 }}>
-              <ListItemIcon sx={{ minWidth: 36 }}>{s.icon}</ListItemIcon>
-              {open && <ListItemText primary={s.label} primaryTypographyProps={{ fontSize: 14 }} />}
+            <ListItemButton
+              key={s.id}
+              onClick={() => scrollTo(s.id)}
+              sx={{
+                py: 0.75, px: 2, borderRadius: 1, mx: 0.5,
+                '&:hover': { bgcolor: 'rgba(0,0,0,0.05)' },
+              }}
+            >
+              <ListItemIcon sx={{ minWidth: 32, color: '#00796B' }}>{s.icon}</ListItemIcon>
+              {open && (
+                <ListItemText
+                  primary={s.label}
+                  primaryTypographyProps={{ fontSize: 13, fontWeight: 500, color: '#1d1d1f' }}
+                />
+              )}
             </ListItemButton>
           ))}
         </List>
       </Drawer>
 
+      {/* Content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           ml: `${open ? DRAWER_WIDTH : MINI_WIDTH}px`,
-          mt: '64px',
+          mt: '44px',
           transition: 'margin 0.2s',
-          bgcolor: '#FAFAFA',
+          bgcolor: '#fff',
         }}
       >
-        <Container maxWidth="md" sx={{ py: 6 }}>
+        <Container maxWidth="md" sx={{ py: 7, px: { xs: 3, md: 6 } }}>
+
+          {/* Page title */}
+          <Typography sx={{ fontSize: 48, fontWeight: 600, letterSpacing: '-0.03em', color: '#1d1d1f', mb: 1 }}>
+            Documentation
+          </Typography>
+          <Typography sx={{ fontSize: 21, color: 'rgba(0,0,0,0.5)', mb: 6, fontWeight: 400 }}>
+            Algorithms, data formats, and evaluation methods.
+          </Typography>
 
           <Section id="overview" title="Overview">
             <Para>
@@ -134,35 +217,35 @@ export default function DocsPage() {
               </a>{' '}
               by Witten, Frank, Hall &amp; Pal (University of Waikato). The ARFF file format is Weka&apos;s own invention.
             </Para>
-            <Alert severity="info" sx={{ mt: 2 }}>
+            <Alert severity="info" sx={{ mt: 2, fontSize: 15 }}>
               Open the <strong>Explorer</strong> to load a dataset and try the algorithms interactively.
             </Alert>
           </Section>
 
-          <Section id="knn" title="k-Nearest Neighbor (k-NN)">
+          <Section id="knn" title="k-Nearest Neighbor">
             <Para>
               k-NN is a lazy learner — it stores the training set and classifies a new instance by finding
               the k closest training examples (by Euclidean distance over numeric attributes) and taking a
               majority vote of their class labels.
             </Para>
-            <Typography variant="subtitle2" fontWeight={700} gutterBottom>Algorithm</Typography>
+            <SubHead>Algorithm</SubHead>
             <Code>{`For a new instance x:
   1. Compute distance(x, xᵢ) for every training instance xᵢ
   2. Sort by distance, take the k smallest
   3. Return the most common class label among those k neighbours`}</Code>
-            <Typography variant="subtitle2" fontWeight={700} gutterBottom>Distance</Typography>
+            <SubHead>Distance</SubHead>
             <Para>
               Euclidean distance on normalised numeric attributes. Nominal attributes use a 0/1 overlap
               metric (0 if equal, 1 if not).
             </Para>
-            <Typography variant="subtitle2" fontWeight={700} gutterBottom>Parameters</Typography>
+            <SubHead>Parameters</SubHead>
             <Box sx={{ mb: 2 }}>
               <Chip label="k" size="small" color="primary" sx={{ mr: 1 }} />
-              <Typography variant="body2" component="span" color="text.secondary">
+              <Typography component="span" sx={{ fontSize: 15, color: 'rgba(0,0,0,0.6)' }}>
                 Number of neighbours. Default is 3. Odd values avoid ties.
               </Typography>
             </Box>
-            <Typography variant="subtitle2" fontWeight={700} gutterBottom>Evaluation</Typography>
+            <SubHead>Evaluation</SubHead>
             <Para>
               Leave-one-out cross-validation or a percentage hold-out split. The Explorer reports
               accuracy, confusion matrix, and per-class precision/recall/F1.
@@ -175,7 +258,7 @@ export default function DocsPage() {
               are conditionally independent given the class. Despite this rarely being true in practice,
               it often performs surprisingly well.
             </Para>
-            <Typography variant="subtitle2" fontWeight={700} gutterBottom>Algorithm</Typography>
+            <SubHead>Algorithm</SubHead>
             <Code>{`P(class | x) ∝ P(class) × ∏ P(xᵢ | class)
 
 Numeric attributes: modelled as Gaussian distributions
@@ -183,7 +266,7 @@ Numeric attributes: modelled as Gaussian distributions
 
 Nominal attributes: frequency counts with Laplace smoothing
   P(xᵢ = v | class) = (count(v in class) + 1) / (count(class) + |values|)`}</Code>
-            <Typography variant="subtitle2" fontWeight={700} gutterBottom>Notes</Typography>
+            <SubHead>Notes</SubHead>
             <Para>
               Laplace smoothing prevents zero-probability issues for unseen attribute values. Prediction
               is computed in log-probability space to avoid underflow with many attributes.
@@ -195,27 +278,27 @@ Nominal attributes: frequency counts with Laplace smoothing
               k-Means partitions instances into k clusters by iteratively assigning each instance to the
               nearest centroid and recomputing centroids until convergence.
             </Para>
-            <Typography variant="subtitle2" fontWeight={700} gutterBottom>Algorithm</Typography>
+            <SubHead>Algorithm</SubHead>
             <Code>{`1. Initialise k centroids (random instances from the dataset)
 2. Repeat until centroids stop moving:
    a. Assign each instance to the nearest centroid
       (Euclidean distance on numeric attributes)
    b. Recompute each centroid as the mean of its assigned instances
 3. Report cluster assignments and within-cluster sum of squares (WCSS)`}</Code>
-            <Typography variant="subtitle2" fontWeight={700} gutterBottom>Parameters</Typography>
+            <SubHead>Parameters</SubHead>
             <Box sx={{ mb: 1 }}>
               <Chip label="k" size="small" color="primary" sx={{ mr: 1 }} />
-              <Typography variant="body2" component="span" color="text.secondary">
+              <Typography component="span" sx={{ fontSize: 15, color: 'rgba(0,0,0,0.6)' }}>
                 Number of clusters.
               </Typography>
             </Box>
             <Box sx={{ mb: 2 }}>
               <Chip label="Max iterations" size="small" color="primary" sx={{ mr: 1 }} />
-              <Typography variant="body2" component="span" color="text.secondary">
-                Safety limit (default 100). In practice the algorithm converges much sooner.
+              <Typography component="span" sx={{ fontSize: 15, color: 'rgba(0,0,0,0.6)' }}>
+                Safety limit (default 100). The algorithm typically converges much sooner.
               </Typography>
             </Box>
-            <Typography variant="subtitle2" fontWeight={700} gutterBottom>Output</Typography>
+            <SubHead>Output</SubHead>
             <Para>
               Cluster assignments, centroid values per attribute, cluster sizes, and the within-cluster
               sum of squares (lower is better — but always decreases as k grows, so compare models with
@@ -234,7 +317,7 @@ Nominal attributes: frequency counts with Laplace smoothing
               An ARFF file has two distinct sections: the <strong>Header</strong> (relation name and
               attribute declarations) followed by the <strong>Data</strong> section.
             </Para>
-            <Typography variant="subtitle2" fontWeight={700} gutterBottom>Structure</Typography>
+            <SubHead>Structure</SubHead>
             <Code>{`% 1. Title: Iris Plants Database
 % Creator: R.A. Fisher
 
@@ -251,33 +334,34 @@ Nominal attributes: frequency counts with Laplace smoothing
 4.9,3.0,1.4,0.2,Iris-setosa
 4.7,3.2,1.3,0.2,Iris-setosa
 ...`}</Code>
-            <Typography variant="subtitle2" fontWeight={700} gutterBottom>Attribute types</Typography>
+            <SubHead>Attribute types</SubHead>
             <Box sx={{ mb: 1 }}>
               <Chip label="numeric" size="small" sx={{ mr: 1 }} />
-              <Typography variant="body2" component="span" color="text.secondary">Continuous real-valued attributes.</Typography>
+              <Typography component="span" sx={{ fontSize: 15, color: 'rgba(0,0,0,0.6)' }}>Continuous real-valued attributes.</Typography>
             </Box>
             <Box sx={{ mb: 1 }}>
               <Chip label="{v1,v2,...}" size="small" sx={{ mr: 1 }} />
-              <Typography variant="body2" component="span" color="text.secondary">Nominal (categorical) — lists all possible values. Used for the class attribute.</Typography>
+              <Typography component="span" sx={{ fontSize: 15, color: 'rgba(0,0,0,0.6)' }}>Nominal (categorical) — lists all possible values. Used for the class attribute.</Typography>
             </Box>
             <Box sx={{ mb: 1 }}>
               <Chip label="string" size="small" sx={{ mr: 1 }} />
-              <Typography variant="body2" component="span" color="text.secondary">Free-form string values. Treated as nominal in this tool.</Typography>
+              <Typography component="span" sx={{ fontSize: 15, color: 'rgba(0,0,0,0.6)' }}>Free-form string values. Treated as nominal in this tool.</Typography>
             </Box>
             <Box sx={{ mb: 2 }}>
               <Chip label="date" size="small" sx={{ mr: 1 }} />
-              <Typography variant="body2" component="span" color="text.secondary">Date/time values (ISO-8601 format). Parsed as numeric timestamps.</Typography>
+              <Typography component="span" sx={{ fontSize: 15, color: 'rgba(0,0,0,0.6)' }}>Date/time values. Parsed as numeric timestamps.</Typography>
             </Box>
             <Para>
-              Lines beginning with <code>%</code> are comments and are ignored. Missing values are
-              represented by <code>?</code> in the data section. Attribute names and string values
-              containing spaces must be quoted.
-            </Para>
-            <Alert severity="info">
-              Sample datasets (<code>iris.arff</code>, <code>weather.arff</code>) are available directly
-              in the Explorer via the <strong>Sample</strong> button. For the full ARFF specification see{' '}
+              Lines beginning with <code style={{ fontFamily: 'monospace', fontSize: 14 }}>%</code> are
+              comments and are ignored. Missing values are represented by{' '}
+              <code style={{ fontFamily: 'monospace', fontSize: 14 }}>?</code>. For the full specification
+              see{' '}
               <a href="https://www.cs.waikato.ac.nz/ml/weka/arff.html" target="_blank" rel="noreferrer"
                 style={{ color: '#00796B' }}>waikato.ac.nz/ml/weka/arff.html</a>.
+            </Para>
+            <Alert severity="info" sx={{ fontSize: 15 }}>
+              Sample datasets (<code>iris.arff</code>, <code>weather.arff</code>) are available in the
+              Explorer via the <strong>Sample</strong> button.
             </Alert>
           </Section>
 
@@ -286,16 +370,15 @@ Nominal attributes: frequency counts with Laplace smoothing
               Plain CSV files are also supported. The first row must be a header with attribute names.
               The last column is assumed to be the class attribute.
             </Para>
-            <Typography variant="subtitle2" fontWeight={700} gutterBottom>Example</Typography>
+            <SubHead>Example</SubHead>
             <Code>{`sepal_length,sepal_width,petal_length,petal_width,species
 5.1,3.5,1.4,0.2,setosa
 4.9,3.0,1.4,0.2,setosa
 7.0,3.2,4.7,1.4,versicolor
 ...`}</Code>
             <Para>
-              Columns with non-numeric values are treated as nominal. All numeric columns are treated as
-              continuous. Missing values (empty cells) are counted during preprocessing and skipped during
-              distance/probability calculations.
+              Columns with non-numeric values are treated as nominal. Missing values (empty cells) are
+              counted during preprocessing and skipped during distance and probability calculations.
             </Para>
           </Section>
 
@@ -303,10 +386,14 @@ Nominal attributes: frequency counts with Laplace smoothing
       </Box>
 
       <Box sx={{
-        py: 3, textAlign: 'center', bgcolor: '#004D40', color: 'rgba(255,255,255,0.6)',
-        ml: `${open ? DRAWER_WIDTH : MINI_WIDTH}px`, transition: 'margin 0.2s',
+        py: 4,
+        textAlign: 'center',
+        borderTop: '1px solid rgba(0,0,0,0.1)',
+        bgcolor: '#F5F5F7',
+        ml: `${open ? DRAWER_WIDTH : MINI_WIDTH}px`,
+        transition: 'margin 0.2s',
       }}>
-        <Typography variant="caption">
+        <Typography sx={{ fontSize: 12, color: 'rgba(0,0,0,0.4)' }}>
           machinelearning.js.org · open source · MIT
         </Typography>
       </Box>
