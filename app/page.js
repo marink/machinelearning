@@ -46,12 +46,13 @@ export default function Home() {
       <Box sx={{ position: 'relative', color: '#fff', overflow: 'hidden', minHeight: 520 }}>
         <NeuralBackground />
 
-        <AppBar position="relative" elevation={0} sx={{
-          bgcolor: 'rgba(0,0,0,0.18)',
+        <AppBar position="fixed" elevation={0} sx={{
+          bgcolor: 'rgba(255, 255, 255, 0.12)',
           backgroundImage: 'none',
           boxShadow: 'none',
-          backdropFilter: 'blur(4px)',
-          WebkitBackdropFilter: 'blur(4px)',
+          backdropFilter: 'saturate(180%) blur(14px)',
+          WebkitBackdropFilter: 'saturate(180%) blur(14px)',
+          borderBottom: '1px solid rgba(255,255,255,0.12)',
         }}>
           <Toolbar variant="dense" sx={{ minHeight: '44px !important' }}>
             <Typography variant="h6" sx={{ fontWeight: 700, flexGrow: 1, letterSpacing: '-0.5px' }}>
@@ -71,7 +72,7 @@ export default function Home() {
           </Toolbar>
         </AppBar>
 
-        <Box sx={{ position: 'relative', zIndex: 1, py: 10, px: 2, textAlign: 'center' }}>
+        <Box sx={{ position: 'relative', zIndex: 1, pt: '44px', py: 10, px: 2, textAlign: 'center' }}>
         <Typography variant="h3" fontWeight={800} gutterBottom>
           Machine Learning in your Browser
         </Typography>
