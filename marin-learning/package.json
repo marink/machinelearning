@@ -12,7 +12,7 @@
         "@material-ui/core": "latest",
         "@material-ui/icons": "latest",
         "dexie": "latest",
-        "next": "^9.2",
+        "next": "^9.5",
         "react": "latest",
         "react-dom": "latest",
         "react-dropzone": "latest",
