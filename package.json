@@ -19,7 +19,7 @@
     "@mui/material-nextjs": "latest",
     "@tanstack/react-table": "^8.21.3",
     "material-react-table": "^2.13.3",
-    "next": "latest",
+    "next": "^16.2.6",
     "react": "latest",
     "react-dom": "latest",
     "recharts": "^2.15.0"
