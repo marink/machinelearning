@@ -4,3 +4,15 @@ out/
 *.log
 .DS_Store
 .env*.local
+
+# Next.js static export output — belongs on gh-pages branch only
+_next/
+webapp/
+p/
+static/
+.nojekyll
+404.html
+about.html
+mini-variant-drawer.html
+post.html
+todo-list.html
