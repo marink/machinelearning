@@ -1,0 +1,2 @@
+:HL["/_next/static/chunks/0oo.5qws7_umk.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"docs","param":null,"prefetchHints":0,"slots":{"children":{"name":"linear-regression","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"Q3DM6woRXuZ3m1smix1wu"}
