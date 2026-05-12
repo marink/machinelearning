@@ -16,6 +16,7 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import InfoIcon from '@mui/icons-material/Info';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import StorageIcon from '@mui/icons-material/Storage';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import Link from 'next/link';
 
 const DRAWER_WIDTH = 240;
@@ -83,6 +84,49 @@ function SubHead({ children }) {
     <Typography sx={{ fontSize: 15, fontWeight: 600, color: '#1d1d1f', mb: 1, mt: 2 }}>
       {children}
     </Typography>
+  );
+}
+
+function StepLabel({ n, label }) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: 2.5, mb: 0.5 }}>
+      <Box sx={{
+        width: 22, height: 22, borderRadius: '50%', bgcolor: '#1565C0',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+      }}>
+        <Typography sx={{ fontSize: 11, fontWeight: 700, color: '#fff', lineHeight: 1 }}>{n}</Typography>
+      </Box>
+      <Typography sx={{ fontSize: 14, fontWeight: 600, color: '#1d1d1f' }}>{label}</Typography>
+    </Box>
+  );
+}
+
+function Citation({ title, authors, venue, year, url, note }) {
+  return (
+    <Paper variant="outlined" sx={{ p: 2, mb: 3, borderColor: 'rgba(21,101,192,0.35)', bgcolor: '#F0F4FF', borderRadius: 2 }}>
+      <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
+        <MenuBookIcon sx={{ color: '#1565C0', mt: 0.25, flexShrink: 0, fontSize: 20 }} />
+        <Box>
+          <Typography sx={{ fontSize: 14, fontWeight: 600, color: '#1d1d1f', mb: 0.25, fontStyle: 'italic' }}>
+            {title}
+          </Typography>
+          <Typography sx={{ fontSize: 13, color: 'rgba(0,0,0,0.55)', mb: 0.75 }}>
+            {authors} · {venue} · {year}
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+            <a href={url} target="_blank" rel="noreferrer"
+              style={{ color: '#1565C0', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>
+              View paper →
+            </a>
+            {note && (
+              <Typography component="span" sx={{ fontSize: 12, color: 'rgba(0,0,0,0.4)' }}>
+                {note}
+              </Typography>
+            )}
+          </Box>
+        </Box>
+      </Box>
+    </Paper>
   );
 }
 
@@ -225,21 +269,63 @@ export default function DocsPage() {
           </Section>
 
           <Section id="knn" title="k-Nearest Neighbor">
+            <Citation
+              title="Nearest Neighbor Pattern Classification"
+              authors="T.M. Cover & P.E. Hart"
+              venue="IEEE Transactions on Information Theory, Vol. 13"
+              year="1967"
+              url="https://doi.org/10.1109/TIT.1967.1053964"
+              note="IEEE Xplore — institutional access may be required"
+            />
             <Para>
               k-NN is a lazy learner — it stores the training set and classifies a new instance by finding
-              the k closest training examples (by Euclidean distance over numeric attributes) and taking a
-              majority vote of their class labels.
+              the k closest training examples and taking a majority vote of their class labels. There is no
+              training phase; all computation happens at query time.
             </Para>
             <SubHead>Algorithm</SubHead>
             <Code>{`For a new instance x:
   1. Compute distance(x, xᵢ) for every training instance xᵢ
   2. Sort by distance, take the k smallest
   3. Return the most common class label among those k neighbours`}</Code>
-            <SubHead>Distance</SubHead>
+            <SubHead>Distance metric</SubHead>
             <Para>
-              Euclidean distance on normalised numeric attributes. Nominal attributes use a 0/1 overlap
-              metric (0 if equal, 1 if not).
+              Numeric attributes use normalized Euclidean distance. Nominal attributes use the overlap
+              metric (0 if equal, 1 otherwise). Missing values contribute a worst-case penalty of 1.
             </Para>
+            <SubHead>Theory → Code</SubHead>
+            <Para>
+              Cover &amp; Hart prove that the 1-NN error rate asymptotically cannot exceed twice the Bayes
+              error rate. Four implementation steps map directly to the paper:
+            </Para>
+            <StepLabel n={1} label="Normalize so no attribute's scale dominates the distance" />
+            <Code>{`// buildNorm() precomputes per-attribute min/max over the training set
+const range = norm.maxs[i] - norm.mins[i] || 1;
+sum += ((a[i] - b[i]) / range) ** 2;   // normalized Euclidean contribution`}</Code>
+            <StepLabel n={2} label="Mixed-attribute distance — numeric, nominal, and missing values" />
+            <Code>{`if (attributes[i].type === 'numeric') {
+  sum += ((a[i] - b[i]) / range) ** 2;  // normalized Euclidean
+} else {
+  sum += a[i] === b[i] ? 0 : 1;         // overlap metric for nominal
+}
+// a[i] === null: sum += 1  (maximum possible distance contribution)`}</Code>
+            <StepLabel n={3} label="Lazy model — the dataset IS the model (no training phase)" />
+            <Code>{`export function train(ds) {
+  // No learning happens here. train() captures the dataset and
+  // precomputes normalization bounds — O(n·d) once, not per query.
+  return { instances: ds.instances, attributes: ds.attributes,
+           classIndex: ds.classIndex,
+           norm: buildNorm(ds.instances, ds.attributes, ds.classIndex) };
+}`}</Code>
+            <StepLabel n={4} label="k-majority vote at classify time" />
+            <Code>{`export function classify(model, instance, k = 1) {
+  const dists = instances.map(tr => ({ d: dist(tr, instance, ...), c: tr[classIndex] }));
+  dists.sort((a, b) => a.d - b.d);            // sort ascending by distance
+  const votes = {};
+  for (const { c } of dists.slice(0, k))     // tally top-k class labels
+    votes[c] = (votes[c] || 0) + 1;
+  return Object.entries(votes)
+    .sort((a, b) => b[1] - a[1])[0][0];      // return plurality class
+}`}</Code>
             <SubHead>Parameters</SubHead>
             <Box sx={{ mb: 2 }}>
               <Chip label="k" size="small" color="primary" sx={{ mr: 1 }} />
@@ -255,38 +341,135 @@ export default function DocsPage() {
           </Section>
 
           <Section id="naivebayes" title="Naïve Bayes">
+            <Citation
+              title="Estimating Continuous Distributions in Bayesian Classifiers"
+              authors="G.H. John & P. Langley"
+              venue="UAI-95 — 11th Conference on Uncertainty in Artificial Intelligence"
+              year="1995"
+              url="https://arxiv.org/abs/1302.4964"
+              note="Free PDF on arXiv"
+            />
             <Para>
-              Naïve Bayes applies Bayes&apos; theorem with the strong (naïve) assumption that all attributes
-              are conditionally independent given the class. Despite this rarely being true in practice,
-              it often performs surprisingly well.
+              Naïve Bayes applies Bayes&apos; theorem with the assumption that all attributes are
+              conditionally independent given the class. Despite this rarely being true, it often performs
+              surprisingly well — especially on text and high-dimensional data.
             </Para>
             <SubHead>Algorithm</SubHead>
             <Code>{`P(class | x) ∝ P(class) × ∏ P(xᵢ | class)
 
-Numeric attributes: modelled as Gaussian distributions
-  P(xᵢ | class) = Normal(μ_class, σ_class)
+Numeric attributes: Gaussian distribution (John & Langley §3)
+  P(xᵢ | class) = (1/√(2πσ²)) × exp(−(x − μ)² / 2σ²)
 
-Nominal attributes: frequency counts with Laplace smoothing
+Nominal attributes: Laplace-smoothed frequency counts
   P(xᵢ = v | class) = (count(v in class) + 1) / (count(class) + |values|)`}</Code>
+            <SubHead>Theory → Code</SubHead>
+            <Para>
+              John &amp; Langley extend classic Naïve Bayes to handle continuous attributes with Gaussian
+              density estimation — the core contribution of their 1995 paper. Four steps map to the code:
+            </Para>
+            <StepLabel n={1} label="Compute class priors P(class) from training frequencies" />
+            <Code>{`for (const cv of classValues) {
+  const subset = instances.filter(i => i[classIndex] === cv);
+  priors[cv] = subset.length / instances.length;  // MLE prior
+}`}</Code>
+            <StepLabel n={2} label="Gaussian likelihood for numeric attributes (John & Langley §3)" />
+            <Code>{`// Estimate μ and σ² per (class, attribute) pair
+const mean = vals.reduce((s, v) => s + v, 0) / (vals.length || 1);
+const variance = vals.reduce((s, v) => s + (v - mean) ** 2, 0)
+                   / (vals.length || 1) || 1e-9;  // floor prevents div-by-zero
+likelihoods[cv][i] = { mean, variance };
+
+// At classify time — log-form avoids floating-point underflow:
+function gaussianLog(x, mean, variance) {
+  return -0.5 * Math.log(2 * Math.PI * variance) - ((x - mean) ** 2) / (2 * variance);
+}`}</Code>
+            <StepLabel n={3} label="Laplace-smoothed counts for nominal attributes" />
+            <Code>{`// Seed every nominal value with count=1 before observing any data.
+// This prevents P(unseen value | class) = 0 from wiping out the posterior.
+const counts = {};
+for (const v of attrVals) counts[v] = 1;            // Laplace prior
+for (const v of vals)     counts[v] = (counts[v] || 1) + 1;
+likelihoods[cv][i] = { counts, total: vals.length + attrVals.length };
+
+// At classify time:
+logP += Math.log((lk.counts[instance[i]] || 1) / lk.total);`}</Code>
+            <StepLabel n={4} label="Classify in log-probability space — prevents underflow" />
+            <Code>{`let logP = Math.log(priors[cv]);           // log P(class)
+for (let i = 0; i < attributes.length; i++) {
+  if (attributes[i].type === 'numeric')
+    logP += gaussianLog(instance[i], lk.mean, lk.variance);
+  else
+    logP += Math.log((lk.counts[instance[i]] || 1) / lk.total);
+}
+if (logP > bestScore) { bestScore = logP; best = cv; }  // argmax`}</Code>
             <SubHead>Notes</SubHead>
             <Para>
-              Laplace smoothing prevents zero-probability issues for unseen attribute values. Prediction
-              is computed in log-probability space to avoid underflow with many attributes.
+              Laplace smoothing prevents zero-probability issues for nominal values not seen during
+              training. The variance floor (<code style={{ fontFamily: 'monospace', fontSize: 13 }}>1e-9</code>)
+              prevents division by zero when all training instances in a class share the same numeric value.
             </Para>
           </Section>
 
           <Section id="kmeans" title="k-Means Clustering">
+            <Citation
+              title="Some Methods for Classification and Analysis of Multivariate Observations"
+              authors="J.B. MacQueen"
+              venue="Proc. 5th Berkeley Symposium on Mathematical Statistics and Probability"
+              year="1967"
+              url="https://projecteuclid.org/euclid.bsmsp/1200512992"
+              note="Free — Project Euclid"
+            />
             <Para>
               k-Means partitions instances into k clusters by iteratively assigning each instance to the
-              nearest centroid and recomputing centroids until convergence.
+              nearest centroid (Euclidean distance on numeric attributes) and recomputing centroids until
+              convergence.
             </Para>
             <SubHead>Algorithm</SubHead>
             <Code>{`1. Initialise k centroids (random instances from the dataset)
-2. Repeat until centroids stop moving:
+2. Repeat until no assignment changes (or maxIter reached):
    a. Assign each instance to the nearest centroid
       (Euclidean distance on numeric attributes)
    b. Recompute each centroid as the mean of its assigned instances
-3. Report cluster assignments and within-cluster sum of squares (WCSS)`}</Code>
+3. Report assignments, centroid values, sizes, and WCSS`}</Code>
+            <SubHead>Theory → Code</SubHead>
+            <Para>
+              MacQueen&apos;s original formulation is the classic Lloyd&apos;s algorithm. Five stages map
+              directly to the implementation:
+            </Para>
+            <StepLabel n={1} label="Initialization — random instances as starting centroids" />
+            <Code>{`// Shuffle the dataset and take the first k instances as seeds.
+// Simple, avoids duplicates, sufficient for small-to-medium datasets.
+const shuffled = [...instances].sort(() => Math.random() - 0.5);
+let centroids = shuffled.slice(0, k).map(inst => idxs.map(i => inst[i] ?? 0));`}</Code>
+            <StepLabel n={2} label="Assignment step — argmin distance to centroid" />
+            <Code>{`const newAssign = projected.map(p => {
+  let best = 0, bestD = Infinity;
+  for (let ki = 0; ki < k; ki++) {
+    const d = centroidDist(p, centroids[ki], idxs.map((_, j) => j));
+    if (d < bestD) { bestD = d; best = ki; }   // argmin over centroids
+  }
+  return best;
+});`}</Code>
+            <StepLabel n={3} label="Update step — recompute centroids as cluster means" />
+            <Code>{`function updateCentroids(instances, assignments, k, idxs) {
+  return Array.from({ length: k }, (_, ki) => {
+    const members = instances.filter((_, j) => assignments[j] === ki);
+    // Empty cluster: reassign to a random instance (avoids degenerate solution)
+    if (!members.length) return instances[Math.floor(Math.random() * instances.length)];
+    return idxs.map(i => members.reduce((s, m) => s + (m[i] ?? 0), 0) / members.length);
+  });
+}`}</Code>
+            <StepLabel n={4} label="Convergence check — stop when no assignments change" />
+            <Code>{`const changed = newAssign.some((a, i) => a !== assignments[i]);
+assignments = newAssign;
+if (!changed) break;   // Lloyd's algorithm is guaranteed to converge`}</Code>
+            <StepLabel n={5} label="WCSS — within-cluster sum of squares (objective function)" />
+            <Code>{`// WCSS = Σᵢ Σⱼ∈cluster(i) ||xⱼ − centroidᵢ||²
+// Lower WCSS → tighter clusters. Always decreases as k increases,
+// so only compare models with the same k value (elbow method).
+const wcss = projected.reduce((s, p, j) =>
+  s + idxs.reduce((s2, _, ii) =>
+    s2 + (p[ii] - centroids[assignments[j]][ii]) ** 2, 0), 0);`}</Code>
             <SubHead>Parameters</SubHead>
             <Box sx={{ mb: 1 }}>
               <Chip label="k" size="small" color="primary" sx={{ mr: 1 }} />

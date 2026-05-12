@@ -101,9 +101,27 @@ export default function Home() {
           </Button>
         </Stack>
         <Stack direction="row" spacing={1} sx={{ mt: 3, px: '10vw', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
-          {['k-NN','Naïve Bayes','k-Means','ARFF','CSV','Zero Install'].map(t => (
-            <Chip key={t} label={t} size="small"
-              sx={{ bgcolor: 'rgba(255,255,255,0.15)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }} />
+          {[
+            { label: 'k-NN',        href: '/docs/#knn' },
+            { label: 'Naïve Bayes', href: '/docs/#naivebayes' },
+            { label: 'k-Means',     href: '/docs/#kmeans' },
+            { label: 'ARFF',        href: '/docs/#arff' },
+            { label: 'CSV',         href: '/docs/#csv' },
+            { label: 'Zero Install' },
+          ].map(({ label, href }) => (
+            <Chip
+              key={label}
+              label={label}
+              size="small"
+              component={href ? Link : 'div'}
+              href={href}
+              clickable={!!href}
+              sx={{
+                bgcolor: 'rgba(255,255,255,0.15)', color: '#fff',
+                border: '1px solid rgba(255,255,255,0.3)',
+                ...(href && { '&:hover': { bgcolor: 'rgba(255,255,255,0.28)' } }),
+              }}
+            />
           ))}
         </Stack>
         </Box>
