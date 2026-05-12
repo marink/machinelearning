@@ -9,6 +9,9 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DatasetIcon from '@mui/icons-material/Dataset';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import HomeIcon from '@mui/icons-material/Home';
+import HelpOutlineIcon from '@mui/icons-material/HelpCenter';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import Link from 'next/link';
 import { autoparse } from '@lib/parser';
 import PreprocessTab from './PreprocessTab';
@@ -17,7 +20,10 @@ import ClassifyTab from './ClassifyTab';
 import ClusterTab from './ClusterTab';
 import VisualizeTab from './VisualizeTab';
 
-const SAMPLE_DATASETS = ['iris.arff', 'weather.arff'];
+const SAMPLE_DATASETS = [
+  { label: 'Book examples', items: ['iris.arff', 'weather.arff', 'contact-lenses.arff', 'labor.arff'] },
+  { label: 'UCI classics',  items: ['diabetes.arff', 'vote.arff', 'glass.arff', 'ionosphere.arff', 'segment-challenge.arff'] },
+];
 
 export default function ExplorerShell() {
   const [tab, setTab]         = useState(0);
@@ -93,10 +99,22 @@ export default function ExplorerShell() {
           </ButtonGroup>
 
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
-            {SAMPLE_DATASETS.map(n => (
-              <MenuItem key={n} onClick={() => loadSample(n)} sx={{ fontFamily: 'monospace', fontSize: 13 }}>{n}</MenuItem>
-            ))}
+            {SAMPLE_DATASETS.map(({ label, items }, gi) => [
+              gi > 0 && <Divider key={`div-${gi}`} />,
+              <MenuItem key={label} disabled sx={{ fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.4)', letterSpacing: '0.06em', textTransform: 'uppercase', py: 0.5, minHeight: 0 }}>
+                {label}
+              </MenuItem>,
+              ...items.map(n => (
+                <MenuItem key={n} onClick={() => loadSample(n)} sx={{ fontFamily: 'monospace', fontSize: 13, pl: 2.5 }}>{n}</MenuItem>
+              )),
+            ])}
           </Menu>
+
+          <Tooltip title="Dataset reference">
+            <IconButton component={Link} href="/docs/#datasets" size="small" sx={{ color: 'rgba(255,255,255,0.8)', '&:hover': { color: '#fff' } }}>
+              <HelpOutlineIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
 
@@ -106,7 +124,7 @@ export default function ExplorerShell() {
           {error
             ? <Typography variant="caption" color="error">{error}</Typography>
             : (
-              <Stack direction="row" spacing={1} alignItems="center">
+              <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                 <Typography variant="caption" fontFamily="monospace" fontWeight={700}>{dsName}</Typography>
                 <Chip label={`${dataset.instances.length} instances`} size="small" color="primary" sx={{ height: 18, fontSize: 11 }} />
                 <Chip label={`${dataset.attributes.length} attributes`} size="small" sx={{ height: 18, fontSize: 11 }} />

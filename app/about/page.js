@@ -80,12 +80,12 @@ export default function AboutPage() {
         <Divider sx={{ mb: 6, borderColor: 'rgba(0,0,0,0.1)' }} />
 
         {/* Book section */}
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={5} alignItems="flex-start" sx={{ mb: 7 }}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={5} sx={{ mb: 7, alignItems: 'flex-start' }}>
           <Box sx={{ flexShrink: 0 }}>
-            <a href="https://www.cs.waikato.ac.nz/ml/weka/book.html" target="_blank" rel="noreferrer">
+            <a href="https://ml.cms.waikato.ac.nz/weka/book.html" target="_blank" rel="noreferrer">
               <Image
-                src="/images/weka-book-cover-4e.jpg"
-                alt="Data Mining: Practical Machine Learning Tools and Techniques — 4th Edition"
+                src="/images/weka-book-cover-5e.jpg"
+                alt="Data Mining: Practical Machine Learning Tools and Techniques — 5th Edition"
                 width={130}
                 height={173}
                 style={{ display: 'block', borderRadius: 6, boxShadow: '0 4px 16px rgba(0,0,0,0.18)' }}
@@ -97,7 +97,7 @@ export default function AboutPage() {
               Data Mining: Practical Machine Learning Tools and Techniques
             </Typography>
             <Typography sx={{ fontSize: 15, color: 'rgba(0,0,0,0.45)', mb: 2 }}>
-              Witten, Frank, Hall &amp; Pal · 4th Edition · University of Waikato
+              Witten, Frank, Hall, Pal &amp; Foulds · 5th Edition · University of Waikato
             </Typography>
             <Typography sx={{ fontSize: 17, lineHeight: 1.7, color: 'rgba(0,0,0,0.7)', mb: 2 }}>
               Most algorithms implemented here follow the descriptions in this book.
@@ -124,11 +124,11 @@ export default function AboutPage() {
               </Stack>
             )}
 
-            <Stack direction="row" spacing={1.5} alignItems="center">
+            <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
               <Button
                 variant="outlined"
                 size="small"
-                href="https://www.cs.waikato.ac.nz/ml/weka/book.html"
+                href="https://ml.cms.waikato.ac.nz/weka/book.html"
                 target="_blank"
                 sx={{ fontSize: 13, color: '#1565C0', borderColor: '#1565C0', textTransform: 'none' }}
               >

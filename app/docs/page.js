@@ -15,6 +15,7 @@ import BubbleChartIcon from '@mui/icons-material/BubbleChart';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import InfoIcon from '@mui/icons-material/Info';
 import TableChartIcon from '@mui/icons-material/TableChart';
+import StorageIcon from '@mui/icons-material/Storage';
 import Link from 'next/link';
 
 const DRAWER_WIDTH = 240;
@@ -37,6 +38,7 @@ const sections = [
   { id: 'kmeans',     label: 'k-Means',     icon: <BubbleChartIcon fontSize="small" /> },
   { id: 'arff',       label: 'ARFF Format', icon: <InsertDriveFileIcon fontSize="small" /> },
   { id: 'csv',        label: 'CSV Format',  icon: <TableChartIcon fontSize="small" /> },
+  { id: 'datasets',   label: 'Datasets',    icon: <StorageIcon fontSize="small" /> },
 ];
 
 function Code({ children }) {
@@ -174,7 +176,7 @@ export default function DocsPage() {
               {open && (
                 <ListItemText
                   primary={s.label}
-                  primaryTypographyProps={{ fontSize: 13, fontWeight: 500, color: '#1d1d1f' }}
+                  slotProps={{ primary: { sx: { fontSize: 13, fontWeight: 500, color: '#1d1d1f' } } }}
                 />
               )}
             </ListItemButton>
@@ -211,7 +213,7 @@ export default function DocsPage() {
             </Para>
             <Para>
               The algorithms and evaluation methods follow the descriptions in{' '}
-              <a href="https://www.cs.waikato.ac.nz/~ml/book" target="_blank" rel="noreferrer"
+              <a href="https://ml.cms.waikato.ac.nz/weka/book.html" target="_blank" rel="noreferrer"
                 style={{ color: '#1565C0' }}>
                 Data Mining: Practical Machine Learning Tools and Techniques
               </a>{' '}
@@ -380,6 +382,132 @@ Nominal attributes: frequency counts with Laplace smoothing
               Columns with non-numeric values are treated as nominal. Missing values (empty cells) are
               counted during preprocessing and skipped during distance and probability calculations.
             </Para>
+          </Section>
+
+          <Section id="datasets" title="Sample Datasets">
+            <Para>
+              The following classic datasets from the{' '}
+              <a href="https://archive.ics.uci.edu/" target="_blank" rel="noreferrer" style={{ color: '#1565C0' }}>
+                UCI Machine Learning Repository
+              </a>{' '}
+              are available in ARFF format and work directly with the Explorer. They are widely used as
+              benchmarks in machine learning research and are referenced throughout the Witten &amp; Frank book.
+              ARFF files are hosted by{' '}
+              <a href="https://storm.cis.fordham.edu/~gweiss/data-mining/datasets.html" target="_blank" rel="noreferrer" style={{ color: '#1565C0' }}>
+                Fordham University
+              </a>.
+            </Para>
+
+            {[
+              {
+                name: 'Iris',
+                instances: 150, attrs: 4, task: 'Classification',
+                desc: 'The most famous dataset in machine learning. Measurements of sepal and petal length and width for three iris species (setosa, versicolor, virginica), 50 instances each. Introduced by R.A. Fisher in 1936.',
+                arff: 'https://storm.cis.fordham.edu/~gweiss/data-mining/weka-data/iris.arff',
+                uci: 'https://archive.ics.uci.edu/dataset/53/iris',
+              },
+              {
+                name: 'Weather (Nominal)',
+                instances: 14, attrs: 4, task: 'Classification',
+                desc: 'The canonical toy dataset from the Weka book. Predicts whether conditions are suitable to play golf based on outlook, temperature, humidity, and wind. All attributes are nominal. Used throughout the book to illustrate decision trees and Naïve Bayes.',
+                arff: 'https://storm.cis.fordham.edu/~gweiss/data-mining/weka-data/weather.nominal.arff',
+                uci: null,
+              },
+              {
+                name: 'Contact Lenses',
+                instances: 24, attrs: 4, task: 'Classification',
+                desc: 'All possible combinations of four nominal attributes (age, spectacle prescription, astigmatism, tear production rate) for recommending soft, hard, or no contact lenses. Small but complete — no missing values.',
+                arff: 'https://storm.cis.fordham.edu/~gweiss/data-mining/weka-data/contact-lenses.arff',
+                uci: 'https://archive.ics.uci.edu/dataset/58/lenses',
+              },
+              {
+                name: 'Labor Relations',
+                instances: 57, attrs: 16, task: 'Classification',
+                desc: 'Final settlements from Canadian labor negotiations (1987–1988) in the business and personal services sector. Mixed numeric and nominal attributes covering wages, hours, pension, and leave. Classifies contracts as acceptable or not.',
+                arff: 'https://storm.cis.fordham.edu/~gweiss/data-mining/weka-data/labor.arff',
+                uci: 'https://archive.ics.uci.edu/dataset/57/labor+relations',
+              },
+              {
+                name: 'Adult (Census Income)',
+                instances: 48842, attrs: 14, task: 'Classification',
+                desc: 'Extracted from the 1994 U.S. Census Bureau database. Predicts whether a person\'s annual income exceeds $50,000 based on demographic attributes including age, education, occupation, marital status, race, and hours worked per week. One of the most widely used benchmark datasets for bias and fairness research.',
+                arff: 'https://storm.cis.fordham.edu/~gweiss/data-mining/weka-data/adult.arff',
+                uci: 'https://archive.ics.uci.edu/dataset/2/adult',
+              },
+              {
+                name: 'Congressional Voting Records',
+                instances: 435, attrs: 16, task: 'Classification',
+                desc: '1984 U.S. House of Representatives voting records on 16 key issues (e.g. aid to Nicaragua, anti-satellite test ban, physician fee freeze). Each instance is a member of Congress classified as Democrat or Republican.',
+                arff: 'https://storm.cis.fordham.edu/~gweiss/data-mining/weka-data/vote.arff',
+                uci: 'https://archive.ics.uci.edu/dataset/105/congressional+voting+records',
+              },
+              {
+                name: 'Pima Indians Diabetes',
+                instances: 768, attrs: 8, task: 'Classification',
+                desc: 'Medical records from the National Institute of Diabetes for Pima Indian women aged 21 or older near Phoenix, Arizona. Attributes include glucose concentration, blood pressure, BMI, insulin level, and diabetes pedigree function. Predicts onset of diabetes.',
+                arff: 'https://storm.cis.fordham.edu/~gweiss/data-mining/weka-data/diabetes.arff',
+                uci: 'https://archive.ics.uci.edu/dataset/34/diabetes',
+              },
+              {
+                name: 'German Credit (credit-g)',
+                instances: 1000, attrs: 20, task: 'Classification',
+                desc: 'Credit risk classification for applicants at a German bank. Mixed attributes cover credit history, loan purpose, employment status, savings, and personal information. Classifies applicants as good or bad credit risks. A cost matrix applies — misclassifying a bad risk as good is five times more costly.',
+                arff: 'https://storm.cis.fordham.edu/~gweiss/data-mining/weka-data/credit-g.arff',
+                uci: 'https://archive.ics.uci.edu/dataset/144/statlog+german+credit+data',
+              },
+              {
+                name: 'Glass Identification',
+                instances: 214, attrs: 9, task: 'Classification',
+                desc: 'Chemical composition measurements (refractive index plus oxide content of Na, Mg, Al, Si, K, Ca, Ba, Fe) for 214 glass samples from crime scene investigations. Six glass types including float and non-float window glass, containers, tableware, and headlamps.',
+                arff: 'https://storm.cis.fordham.edu/~gweiss/data-mining/weka-data/glass.arff',
+                uci: 'https://archive.ics.uci.edu/dataset/42/glass+identification',
+              },
+              {
+                name: 'Ionosphere',
+                instances: 351, attrs: 34, task: 'Classification',
+                desc: 'Radar returns from a phased array of 16 HF antennas in Goose Bay, Labrador, targeting free electrons in the ionosphere. Returns classified as "good" (evidence of structure) or "bad" (pass-throughs). All 34 attributes are continuous pulse numbers.',
+                arff: 'https://storm.cis.fordham.edu/~gweiss/data-mining/weka-data/ionosphere.arff',
+                uci: 'https://archive.ics.uci.edu/dataset/52/ionosphere',
+              },
+              {
+                name: 'Image Segmentation',
+                instances: 210, attrs: 19, task: 'Classification',
+                desc: 'Each instance is a 3×3-pixel region drawn from seven outdoor images. Nineteen continuous attributes describe the region\'s spectral and geometric properties. Seven classes: brickface, sky, foliage, cement, window, path, and grass.',
+                arff: 'https://storm.cis.fordham.edu/~gweiss/data-mining/weka-data/segment-challenge.arff',
+                uci: 'https://archive.ics.uci.edu/dataset/50/image+segmentation',
+              },
+              {
+                name: 'Hypothyroid',
+                instances: 3772, attrs: 30, task: 'Classification',
+                desc: 'Patient records from the Garavan Institute for diagnosing thyroid disorders. Seven continuous attributes (TSH, T3, TT4, T4U, FTI, age) and 23 nominal attributes including medications and test flags. Four classes: negative, compensated hypothyroid, primary hypothyroid, secondary hypothyroid. Contains missing values.',
+                arff: 'https://storm.cis.fordham.edu/~gweiss/data-mining/weka-data/hypothyroid.arff',
+                uci: 'https://archive.ics.uci.edu/dataset/102/thyroid+disease',
+              },
+            ].map(ds => (
+              <Box key={ds.name} sx={{ mb: 2.5, p: 2.5, border: '1px solid rgba(0,0,0,0.08)', borderRadius: 2, bgcolor: '#FAFAFA' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
+                  <Typography sx={{ fontSize: 16, fontWeight: 600, color: '#1d1d1f', mr: 0.5 }}>{ds.name}</Typography>
+                  <Chip label={`${ds.instances.toLocaleString()} instances`} size="small" variant="outlined" />
+                  <Chip label={`${ds.attrs} attributes`} size="small" variant="outlined" />
+                  <Chip label={ds.task} size="small" color="primary" />
+                </Box>
+                <Typography sx={{ fontSize: 15, color: 'rgba(0,0,0,0.65)', mb: 1.5, lineHeight: 1.65 }}>
+                  {ds.desc}
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                  <a href={ds.arff} target="_blank" rel="noreferrer"
+                    style={{ color: '#1565C0', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>
+                    ↓ Download ARFF
+                  </a>
+                  {ds.uci && (
+                    <a href={ds.uci} target="_blank" rel="noreferrer"
+                      style={{ color: '#1565C0', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>
+                      UCI Repository →
+                    </a>
+                  )}
+                </Box>
+              </Box>
+            ))}
           </Section>
 
         </Container>

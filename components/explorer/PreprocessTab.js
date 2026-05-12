@@ -36,7 +36,7 @@ export default function PreprocessTab({ dataset }) {
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
       {/* Relation info */}
-      <Grid item xs={12}>
+      <Grid size={{ xs: 12 }}>
         <Paper variant="outlined" sx={{ p: 2, display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
           <Typography variant="subtitle2" fontWeight={700}>Relation:</Typography>
           <Typography variant="body2" fontFamily="monospace">{dataset.relation}</Typography>
@@ -47,7 +47,7 @@ export default function PreprocessTab({ dataset }) {
       </Grid>
 
       {/* Attribute list */}
-      <Grid item xs={12} md={5}>
+      <Grid size={{ xs: 12, md: 5 }}>
         <Paper variant="outlined" sx={{ overflow: 'hidden' }}>
           <Box sx={{ p: 1.5, bgcolor: '#004D40', color: '#fff' }}>
             <Typography variant="subtitle2" fontWeight={700}>Attributes</Typography>
@@ -91,7 +91,7 @@ export default function PreprocessTab({ dataset }) {
       </Grid>
 
       {/* Selected attribute detail */}
-      <Grid item xs={12} md={7}>
+      <Grid size={{ xs: 12, md: 7 }}>
         <Paper variant="outlined" sx={{ p: 2, height: '100%' }}>
           <Typography variant="subtitle2" fontWeight={700} gutterBottom>
             {sel.name} ({sel.type})
@@ -100,7 +100,7 @@ export default function PreprocessTab({ dataset }) {
           {sel.type === 'numeric' ? (
             <Grid container spacing={1} sx={{ mb: 2 }}>
               {[['Min', sel.min],['Max', sel.max],['Mean', sel.mean],['StdDev', sel.stddev],['Median', sel.median]].map(([l, v]) => (
-                <Grid item xs={4} key={l}>
+                <Grid size={{ xs: 4 }} key={l}>
                   <Box sx={{ bgcolor: '#F5F5F5', borderRadius: 1, p: 1, textAlign: 'center' }}>
                     <Typography variant="caption" color="text.secondary">{l}</Typography>
                     <Typography variant="body2" fontWeight={700}>{v}</Typography>

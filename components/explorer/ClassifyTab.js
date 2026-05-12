@@ -87,7 +87,7 @@ export default function ClassifyTab({ dataset }) {
 
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
-      <Grid item xs={12} md={4}>
+      <Grid size={{ xs: 12, md: 4 }}>
         <Paper variant="outlined" sx={{ p: 2 }}>
           <Typography variant="subtitle2" fontWeight={700} gutterBottom>Classifier</Typography>
           <FormControl fullWidth size="small" sx={{ mb: 2 }}>
@@ -126,7 +126,7 @@ export default function ClassifyTab({ dataset }) {
         </Paper>
       </Grid>
 
-      <Grid item xs={12} md={8}>
+      <Grid size={{ xs: 12, md: 8 }}>
         <Paper variant="outlined" sx={{ p: 0, overflow: 'hidden' }}>
           <Box sx={{ p: 1.5, bgcolor: '#004D40', color: '#fff' }}>
             <Typography variant="subtitle2" fontWeight={700}>Classifier output</Typography>

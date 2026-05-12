@@ -40,7 +40,7 @@ export default function VisualizeTab({ dataset }) {
 
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
-      <Grid item xs={12} md={3}>
+      <Grid size={{ xs: 12, md: 3 }}>
         <Paper variant="outlined" sx={{ p: 2 }}>
           <Typography variant="subtitle2" fontWeight={700} gutterBottom>Axes</Typography>
           <FormControl fullWidth size="small" sx={{ mb: 2 }}>
@@ -68,7 +68,7 @@ export default function VisualizeTab({ dataset }) {
         </Paper>
       </Grid>
 
-      <Grid item xs={12} md={9}>
+      <Grid size={{ xs: 12, md: 9 }}>
         <Paper variant="outlined" sx={{ p: 2 }}>
           <Typography variant="subtitle2" fontWeight={700} gutterBottom>
             {numericAttrs[xAttr]?.name} vs {numericAttrs[yAttr]?.name}

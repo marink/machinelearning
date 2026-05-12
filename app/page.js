@@ -80,7 +80,7 @@ export default function Home() {
           A JavaScript reimagining of Weka — load a dataset, train a model, and read the results.
           Nothing to install. Everything runs locally.
         </Typography>
-        <Stack direction="row" spacing={2} justifyContent="flex-start" flexWrap="wrap" sx={{ px: '10vw', mt: '40px' }}>
+        <Stack direction="row" spacing={2} sx={{ px: '10vw', mt: '40px', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
           <Button
             variant="contained"
             size="large"
@@ -93,14 +93,14 @@ export default function Home() {
           <Button
             variant="outlined"
             size="large"
-            href="https://www.cs.waikato.ac.nz/~ml/book"
+            href="https://ml.cms.waikato.ac.nz/weka/book.html"
             target="_blank"
             sx={{ color: '#fff', borderColor: 'rgba(255,255,255,0.5)' }}
           >
             Witten &amp; Frank Book
           </Button>
         </Stack>
-        <Stack direction="row" spacing={1} justifyContent="flex-start" sx={{ mt: 3, px: '10vw' }} flexWrap="wrap">
+        <Stack direction="row" spacing={1} sx={{ mt: 3, px: '10vw', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
           {['k-NN','Naïve Bayes','k-Means','ARFF','CSV','Zero Install'].map(t => (
             <Chip key={t} label={t} size="small"
               sx={{ bgcolor: 'rgba(255,255,255,0.15)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }} />
