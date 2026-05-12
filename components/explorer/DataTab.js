@@ -61,29 +61,28 @@ export default function DataTab({ dataset }) {
     enableGlobalFilter: true,
     enableColumnFilters: true,
     enableSorting: true,
-    enablePagination: true,
+    enablePagination: false,
+    enableBottomToolbar: false,
+    enableRowVirtualization: true,
     enableDensityToggle: true,
     enableFullScreenToggle: false,
     enableHiding: true,
     columnResizeMode: 'onChange',
     initialState: {
       density: 'compact',
-      pagination: { pageSize: 25 },
       showGlobalFilter: true,
     },
-    muiTableContainerProps: { sx: { maxHeight: 'calc(100vh - 220px)' } },
+    muiTableContainerProps: { sx: { height: 'calc(100vh - 185px)' } },
     muiTableHeadCellProps: {
       sx: { bgcolor: '#E3F0FF', fontWeight: 700, fontSize: 13, py: 1 },
     },
-    muiTableBodyRowProps: ({ row }) => ({
+    muiTableBodyRowProps: {
       sx: { '&:hover td': { bgcolor: '#F1F8F7' } },
-    }),
+    },
     muiTableBodyCellProps: {
       sx: { py: 0.4, px: 1.5, fontSize: 13, borderBottom: '1px solid rgba(0,0,0,0.06)' },
     },
     muiTopToolbarProps: { sx: { bgcolor: '#FAFAFA', borderBottom: '1px solid rgba(0,0,0,0.08)' } },
-    muiBottomToolbarProps: { sx: { bgcolor: '#FAFAFA', borderTop: '1px solid rgba(0,0,0,0.08)' } },
-    muiPaginationProps: { rowsPerPageOptions: [10, 25, 50, 100, 200] },
     renderTopToolbarCustomActions: () => (
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', pl: 1 }}>
         <Chip label={`${instances.length} rows`} size="small" color="primary" />
