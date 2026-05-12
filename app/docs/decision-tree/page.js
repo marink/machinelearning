@@ -2,12 +2,14 @@
 
 import { Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, StepLabel, Citation, ParamRow, Tex, BlockTex, Algo, Line, Kw } from '@components/docs/DocComponents';
+import { Section, Para, Code, StepLabel, Citation, ParamRow, Tex, BlockTex, Algo, Line, Kw, Complexity, Lemma, Proof } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Original Paper' },
   { id: 'algorithm',   label: 'Algorithm' },
   { id: 'walkthrough', label: 'Theory → Code' },
+  { id: 'theory',      label: 'Theory' },
+  { id: 'complexity',  label: 'Complexity' },
   { id: 'parameters',  label: 'Parameters' },
   { id: 'notes',       label: 'Notes' },
 ];
@@ -115,6 +117,36 @@ for (let i = 0; i < sorted.length - 1; i++) {
   }
   return node.value;
 }`}</Code>
+      </Section>
+
+      <Section id="theory" title="Theory">
+        <Lemma n={1}>
+          Information gain is non-negative: <Tex src="IG(S, a) \ge 0" /> for all attributes <Tex src="a" />.
+        </Lemma>
+        <Proof>
+          Entropy <Tex src="H" /> is concave on probability distributions. By Jensen's inequality
+          applied to the concave function <Tex src="H" />:
+          <BlockTex src="H(S) \;\ge\; \sum_{v} \frac{|S_v|}{|S|} H(S_v)" />
+          Therefore <Tex src="IG(S, a) = H(S) - \sum_v \frac{|S_v|}{|S|}H(S_v) \ge 0" />.
+        </Proof>
+        <Lemma n={2}>
+          ID3 is guaranteed to reduce training error at each split, but provides no bound on
+          generalisation error. The tree will overfit if grown without depth or leaf-size limits.
+        </Lemma>
+      </Section>
+
+      <Section id="complexity" title="Complexity">
+        <Complexity rows={[
+          { label: 'Training',  tex: 'O(n \\cdot d \\cdot \\log n \\cdot h)', note: 'n instances, d attributes, h max depth' },
+          { label: 'Query',     tex: 'O(h)',                                   note: 'single root-to-leaf traversal' },
+          { label: 'Space',     tex: 'O(n)',                                   note: 'tree nodes proportional to training set' },
+        ]} />
+        <Para>
+          At each node, scoring all <Tex src="d" /> attributes over the remaining <Tex src="n" /> instances
+          costs <Tex src="O(n \cdot d)" />; with <Tex src="O(\log n)" /> nodes per level and depth <Tex src="h" />,
+          total training is <Tex src="O(n \cdot d \cdot h \cdot \log n)" />.
+          Numeric attributes add a <Tex src="O(n \log n)" /> sort per attribute per node.
+        </Para>
       </Section>
 
       <Section id="parameters" title="Parameters">

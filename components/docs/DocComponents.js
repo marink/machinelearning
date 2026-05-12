@@ -188,3 +188,88 @@ export function Kw({ children }) {
     </Box>
   );
 }
+
+// ── Complexity table ───────────────────────────────────────────────────────
+
+export function Complexity({ rows }) {
+  return (
+    <Paper variant="outlined" sx={{
+      my: 2, borderRadius: 2, overflow: 'hidden',
+      borderColor: 'rgba(0,0,0,0.12)',
+      borderLeft: '3px solid #F57F17',
+    }}>
+      <Box sx={{ px: 2.5, py: 0.75, bgcolor: '#FFFDE7', borderBottom: '1px solid rgba(245,127,23,0.15)' }}>
+        <Typography sx={{ fontSize: 12, fontWeight: 700, color: '#F57F17', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+          Complexity
+        </Typography>
+      </Box>
+      <Box sx={{ px: 2.5, py: 1.5, bgcolor: '#FFFEF5', display: 'flex', flexDirection: 'column', gap: 0.6 }}>
+        {rows.map(({ label, tex, note }) => (
+          <Box key={label} sx={{ display: 'flex', alignItems: 'baseline', gap: 1.5, flexWrap: 'wrap' }}>
+            <Typography sx={{ fontSize: 13, color: 'rgba(0,0,0,0.45)', minWidth: 90, flexShrink: 0 }}>
+              {label}
+            </Typography>
+            <Box component="span" sx={{ fontSize: 14 }}>
+              <Tex src={tex} />
+            </Box>
+            {note && (
+              <Typography component="span" sx={{ fontSize: 12.5, color: 'rgba(0,0,0,0.4)', fontStyle: 'italic' }}>
+                — {note}
+              </Typography>
+            )}
+          </Box>
+        ))}
+      </Box>
+    </Paper>
+  );
+}
+
+// ── Theorem / Lemma / Corollary / Proposition ──────────────────────────────
+
+const THEOREM_STYLES = {
+  theorem:     { bg: '#EEF2FF', border: '#3F51B5', labelColor: '#3F51B5' },
+  lemma:       { bg: '#F3F4F6', border: '#6B7280', labelColor: '#374151' },
+  corollary:   { bg: '#F0FDF4', border: '#16A34A', labelColor: '#15803D' },
+  proposition: { bg: '#FFF7ED', border: '#EA580C', labelColor: '#C2410C' },
+};
+
+function TheoremBox({ type, n, children }) {
+  const s = THEOREM_STYLES[type] || THEOREM_STYLES.theorem;
+  const label = type.charAt(0).toUpperCase() + type.slice(1) + (n != null ? ` ${n}` : '') + '.';
+  return (
+    <Paper variant="outlined" sx={{
+      my: 2, p: 2.5, borderRadius: 2,
+      borderColor: s.border,
+      borderLeft: `3px solid ${s.border}`,
+      bgcolor: s.bg,
+    }}>
+      <Typography sx={{ fontSize: 14.5, lineHeight: 1.8, color: '#1d1d1f' }}>
+        <Box component="span" sx={{ fontWeight: 700, fontStyle: 'italic', color: s.labelColor, mr: 0.75 }}>
+          {label}
+        </Box>
+        {children}
+      </Typography>
+    </Paper>
+  );
+}
+
+export function Theorem({ n, children })     { return <TheoremBox type="theorem"     n={n}>{children}</TheoremBox>; }
+export function Lemma({ n, children })       { return <TheoremBox type="lemma"       n={n}>{children}</TheoremBox>; }
+export function Corollary({ n, children })   { return <TheoremBox type="corollary"   n={n}>{children}</TheoremBox>; }
+export function Proposition({ n, children }) { return <TheoremBox type="proposition" n={n}>{children}</TheoremBox>; }
+
+// ── Proof sketch ───────────────────────────────────────────────────────────
+
+export function Proof({ children }) {
+  return (
+    <Box sx={{ my: 1.5, pl: 2.5, borderLeft: '2px solid rgba(0,0,0,0.1)' }}>
+      <Typography sx={{ fontSize: 13.5, color: 'rgba(0,0,0,0.65)', lineHeight: 1.85 }}>
+        <Box component="span" sx={{ fontStyle: 'italic', fontWeight: 600, color: 'rgba(0,0,0,0.45)', mr: 0.75 }}>
+          Proof sketch.
+        </Box>
+        {children}
+        <Box component="span" sx={{ ml: 1.5, color: 'rgba(0,0,0,0.35)', fontSize: 16, fontStyle: 'normal' }}>□</Box>
+      </Typography>
+    </Box>
+  );
+}

@@ -2,12 +2,14 @@
 
 import { Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, StepLabel, Citation, ParamRow, Tex, BlockTex } from '@components/docs/DocComponents';
+import { Section, Para, Code, StepLabel, Citation, ParamRow, Tex, BlockTex, Complexity, Theorem, Proof } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Reference' },
   { id: 'algorithm',   label: 'Algorithm' },
   { id: 'walkthrough', label: 'Theory → Code' },
+  { id: 'theory',      label: 'Theory' },
+  { id: 'complexity',  label: 'Complexity' },
   { id: 'parameters',  label: 'Parameters' },
   { id: 'metrics',     label: 'Evaluation Metrics' },
   { id: 'notes',       label: 'Notes' },
@@ -92,6 +94,40 @@ const y = instances.map(r => ((r[classIndex] ?? 0) - tMin) / tRange);`}</Code>
     rmse: Math.sqrt(sse / n),
   };
 }`}</Code>
+      </Section>
+
+      <Section id="theory" title="Theory">
+        <Theorem n={1}>
+          The MSE loss <Tex src="L(\mathbf{w}, b)" /> is convex in <Tex src="\mathbf{w}" /> and <Tex src="b" />.
+          Gradient descent with step size <Tex src="\eta < 2/\lambda_{\max}" /> (where{' '}
+          <Tex src="\lambda_{\max}" /> is the largest eigenvalue of <Tex src="X^\top X / n" />) converges
+          to the unique global minimum.
+        </Theorem>
+        <Proof>
+          The Hessian of MSE is <Tex src="\nabla^2 L = 2X^\top X / n \succeq 0" />, which is positive
+          semi-definite — so MSE is convex. The unique minimiser satisfies the normal equations{' '}
+          <Tex src="X^\top X \mathbf{w} = X^\top \mathbf{y}" />. Under the step-size condition,
+          the gradient iterates contract at rate <Tex src="(1 - \eta\lambda_{\min})^t \to 0" />.
+        </Proof>
+        <Theorem n={2}>
+          (Gauss–Markov) Among all linear unbiased estimators, the OLS solution{' '}
+          <Tex src="\hat{\mathbf{w}} = (X^\top X)^{-1} X^\top \mathbf{y}" /> has the smallest variance —
+          it is the Best Linear Unbiased Estimator (BLUE).
+        </Theorem>
+      </Section>
+
+      <Section id="complexity" title="Complexity">
+        <Complexity rows={[
+          { label: 'Training (GD)',  tex: 'O(n \\cdot d \\cdot e)',      note: 'n instances, d features, e epochs' },
+          { label: 'Normal Eqs.',    tex: 'O(n \\cdot d^2 + d^3)',       note: 'matrix multiply + inversion' },
+          { label: 'Query',          tex: 'O(d)',                         note: 'single dot product' },
+          { label: 'Space',          tex: 'O(d)',                         note: 'one weight vector' },
+        ]} />
+        <Para>
+          Normal equations are exact but scale poorly: <Tex src="O(d^3)" /> matrix inversion
+          becomes prohibitive when <Tex src="d \gg 10^3" />. Gradient descent trades exactness for
+          scalability and is preferred in practice.
+        </Para>
       </Section>
 
       <Section id="parameters" title="Parameters">

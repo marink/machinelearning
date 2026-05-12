@@ -2,12 +2,14 @@
 
 import { Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, StepLabel, Citation, ParamRow, BlockTex } from '@components/docs/DocComponents';
+import { Section, Para, Code, StepLabel, Citation, ParamRow, BlockTex, Tex, Complexity, Lemma, Proof } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Original Paper' },
   { id: 'algorithm',   label: 'Algorithm' },
   { id: 'walkthrough', label: 'Theory → Code' },
+  { id: 'theory',      label: 'Theory' },
+  { id: 'complexity',  label: 'Complexity' },
   { id: 'parameters',  label: 'Parameters' },
   { id: 'notes',       label: 'Notes' },
 ];
@@ -79,6 +81,33 @@ export default function LogisticRegressionPage() {
   }
   return best;
 }`}</Code>
+      </Section>
+
+      <Section id="theory" title="Theory">
+        <Lemma n={1}>
+          The binary cross-entropy loss <Tex src="L(\mathbf{w}, b)" /> is convex in{' '}
+          <Tex src="(\mathbf{w}, b)" /> — gradient descent converges to the global minimum
+          (assuming it exists; it may not when the data are linearly separable).
+        </Lemma>
+        <Proof>
+          The Hessian is <Tex src="H = \tfrac{1}{n}X^\top \operatorname{diag}(\sigma_i(1-\sigma_i)) X" />.
+          Since <Tex src="\sigma(z)(1-\sigma(z)) > 0" /> for all <Tex src="z \in \mathbb{R}" />,
+          the diagonal matrix is positive definite, and <Tex src="X^\top(\cdot)X" /> is positive
+          semi-definite. Therefore <Tex src="H \succeq 0" /> and <Tex src="L" /> is convex.
+        </Proof>
+        <Lemma n={2}>
+          When the training data are linearly separable, no finite weight vector minimises the
+          cross-entropy loss — weights grow unboundedly to push <Tex src="\sigma(z_i) \to 1" /> for
+          all positive examples. Regularisation (L2 penalty) is required to recover a finite solution.
+        </Lemma>
+      </Section>
+
+      <Section id="complexity" title="Complexity">
+        <Complexity rows={[
+          { label: 'Training', tex: 'O(n \\cdot d \\cdot e \\cdot c)', note: 'one binary classifier per class (one-vs-rest)' },
+          { label: 'Query',    tex: 'O(c \\cdot d)',                   note: 'one sigmoid score per class' },
+          { label: 'Space',    tex: 'O(c \\cdot d)',                   note: 'one weight vector per class' },
+        ]} />
       </Section>
 
       <Section id="parameters" title="Parameters">

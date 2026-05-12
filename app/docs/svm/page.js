@@ -2,12 +2,14 @@
 
 import { Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, StepLabel, Citation, ParamRow, Tex, BlockTex, Algo, Line, Kw } from '@components/docs/DocComponents';
+import { Section, Para, Code, StepLabel, Citation, ParamRow, Tex, BlockTex, Algo, Line, Kw, Complexity, Theorem } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Original Paper' },
   { id: 'algorithm',   label: 'Algorithm' },
   { id: 'walkthrough', label: 'Theory → Code' },
+  { id: 'theory',      label: 'Theory' },
+  { id: 'complexity',  label: 'Complexity' },
   { id: 'parameters',  label: 'Parameters' },
   { id: 'notes',       label: 'Notes' },
 ];
@@ -93,6 +95,34 @@ const hingeActive = score < 1;`}</Code>
   }
   return best;
 }`}</Code>
+      </Section>
+
+      <Section id="theory" title="Theory">
+        <Theorem n={1}>
+          (Structural Risk Minimisation — Vapnik, 1995) The expected test error of a hard-margin
+          SVM is bounded by:
+        </Theorem>
+        <BlockTex src="\mathbb{E}[\text{error}] \;\le\; O\!\left(\frac{\|\mathbf{w}\|^2 R^2}{m\,\gamma^2}\right)" />
+        <Para>
+          where <Tex src="\gamma = 1/\|\mathbf{w}\|" /> is the margin, <Tex src="R" /> is the
+          radius of the smallest enclosing ball, and <Tex src="m" /> is the number of training
+          examples. Maximising the margin minimises this generalisation bound — the theoretical
+          justification for the SVM objective.
+        </Para>
+        <Theorem n={2}>
+          (Representer Theorem) The optimal weight vector lies in the span of the training
+          examples: <Tex src="\mathbf{w}^* = \sum_i \alpha_i y_i \mathbf{x}_i" /> where{' '}
+          <Tex src="\alpha_i \ge 0" />. Only the support vectors (instances with <Tex src="\alpha_i > 0" />) contribute — all other training points are irrelevant to the decision boundary.
+        </Theorem>
+      </Section>
+
+      <Section id="complexity" title="Complexity">
+        <Complexity rows={[
+          { label: 'Training (SGD)', tex: 'O(n \\cdot d \\cdot e)',  note: 'n instances, d features, e epochs' },
+          { label: 'Training (QP)',  tex: 'O(n^2 \\cdot d)',         note: 'exact dual — not used here' },
+          { label: 'Query',          tex: 'O(c \\cdot d)',           note: 'one dot product per class (one-vs-rest)' },
+          { label: 'Space',          tex: 'O(c \\cdot d)',           note: 'one weight vector per class' },
+        ]} />
       </Section>
 
       <Section id="parameters" title="Parameters">

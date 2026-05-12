@@ -2,12 +2,14 @@
 
 import { Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, StepLabel, Citation, ParamRow, BlockTex, Algo, Line, Kw } from '@components/docs/DocComponents';
+import { Section, Para, Code, StepLabel, Citation, ParamRow, BlockTex, Tex, Algo, Line, Kw, Complexity, Theorem, Lemma, Proof } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Original Paper' },
   { id: 'algorithm',   label: 'Algorithm' },
   { id: 'walkthrough', label: 'Theory → Code' },
+  { id: 'theory',      label: 'Theory' },
+  { id: 'complexity',  label: 'Complexity' },
   { id: 'parameters',  label: 'Parameters' },
   { id: 'output',      label: 'Output' },
 ];
@@ -91,6 +93,44 @@ if (!changed) break;   // Lloyd's algorithm is guaranteed to converge`}</Code>
   s + idxs.reduce((s2, _, ii) =>
     s2 + (p[ii] - centroids[assignments[j]][ii]) ** 2, 0), 0);
 // Lower WCSS → tighter clusters; only compare across models with the same k.`}</Code>
+      </Section>
+
+      <Section id="theory" title="Theory">
+        <Theorem n={1}>
+          (Convergence of Lloyd's algorithm) The k-Means algorithm terminates in a finite number
+          of iterations.
+        </Theorem>
+        <Proof>
+          There are <Tex src="k^n" /> possible assignments of <Tex src="n" /> points to <Tex src="k" /> clusters —
+          a finite set. The WCSS objective strictly decreases at each step: the assignment step
+          minimises WCSS for fixed centroids (each point goes to its nearest centre); the update
+          step (setting centroids to cluster means) minimises WCSS for fixed assignments. Since
+          WCSS is bounded below by 0 and strictly decreases, the algorithm cannot revisit a prior
+          assignment and must terminate.
+        </Proof>
+        <Lemma n={1}>
+          Lloyd's algorithm converges to a <em>local</em> minimum of WCSS, not necessarily the
+          global minimum. The result depends on initialisation; multiple restarts with different
+          random seeds and selecting the run with lowest WCSS is standard practice.
+        </Lemma>
+        <Lemma n={2}>
+          WCSS is a monotone decreasing function of <Tex src="k" />:{' '}
+          <Tex src="\text{WCSS}(k+1) \le \text{WCSS}(k)" /> always. Therefore WCSS alone cannot
+          determine the optimal <Tex src="k" /> — use the elbow method or gap statistic instead.
+        </Lemma>
+      </Section>
+
+      <Section id="complexity" title="Complexity">
+        <Complexity rows={[
+          { label: 'Per iteration', tex: 'O(n \\cdot k \\cdot d)', note: 'assign each of n points to nearest of k centroids' },
+          { label: 'Total',         tex: 'O(n \\cdot k \\cdot d \\cdot t)', note: 't iterations until convergence' },
+          { label: 'Space',         tex: 'O((n + k) \\cdot d)',    note: 'data + centroid storage' },
+        ]} />
+        <Para>
+          In practice <Tex src="t \ll n" /> — most datasets converge in under 20 iterations.
+          k-Means++ initialisation (choose centroids proportional to squared distance from
+          existing centroids) improves both quality and convergence speed but is not implemented here.
+        </Para>
       </Section>
 
       <Section id="parameters" title="Parameters">

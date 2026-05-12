@@ -2,13 +2,15 @@
 
 import { Box, Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, SubHead, StepLabel, Citation, ParamRow, Tex, BlockTex, Algo, Line, Kw } from '@components/docs/DocComponents';
+import { Section, Para, Code, SubHead, StepLabel, Citation, ParamRow, Tex, BlockTex, Algo, Line, Kw, Complexity, Theorem, Corollary } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Original Paper' },
   { id: 'algorithm',   label: 'Algorithm' },
   { id: 'distance',    label: 'Distance Metric' },
   { id: 'walkthrough', label: 'Theory → Code' },
+  { id: 'theory',      label: 'Theory' },
+  { id: 'complexity',  label: 'Complexity' },
   { id: 'parameters',  label: 'Parameters' },
   { id: 'evaluation',  label: 'Evaluation' },
 ];
@@ -100,6 +102,35 @@ sum += ((a[i] - b[i]) / range) ** 2;   // normalized Euclidean contribution`}</C
   return Object.entries(votes)
     .sort((a, b) => b[1] - a[1])[0][0];      // return plurality class
 }`}</Code>
+      </Section>
+
+      <Section id="theory" title="Theory">
+        <Theorem n={1}>
+          (Cover &amp; Hart, 1967) Let <Tex src="R^*" /> be the Bayes error rate and <Tex src="R_1" /> the
+          1-NN error rate. As the training set size <Tex src="n \to \infty" />:
+        </Theorem>
+        <BlockTex src="R^* \;\le\; R_1 \;\le\; 2R^*\!\left(1 - R^*\right) \;\le\; 2R^*" />
+        <Para>
+          The upper bound shows 1-NN can never be worse than twice the Bayes error — making
+          it a theoretical lower bound on classification difficulty for any non-parametric method.
+        </Para>
+        <Corollary n={1}>
+          For odd <Tex src="k" /> with <Tex src="k \to \infty" /> and <Tex src="k/n \to 0" /> as <Tex src="n \to \infty" />,
+          the k-NN error rate converges to the Bayes error rate <Tex src="R^*" />.
+        </Corollary>
+      </Section>
+
+      <Section id="complexity" title="Complexity">
+        <Complexity rows={[
+          { label: 'Training',  tex: 'O(n \\cdot d)',        note: 'store dataset, precompute per-attribute min/max' },
+          { label: 'Query',     tex: 'O(n \\cdot d)',        note: 'full distance scan; no index structure' },
+          { label: 'Space',     tex: 'O(n \\cdot d)',        note: 'entire training set kept in memory' },
+        ]} />
+        <Para>
+          k-NN pays no cost at training time — all work happens at query time. For large datasets,
+          approximate nearest-neighbour structures (kd-trees, ball trees) reduce query cost to
+          <Tex src="O(d \log n)" /> on average, but are not implemented here.
+        </Para>
       </Section>
 
       <Section id="parameters" title="Parameters">

@@ -2,12 +2,14 @@
 
 import { Box, Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, StepLabel, Citation, ParamRow, BlockTex } from '@components/docs/DocComponents';
+import { Section, Para, Code, StepLabel, Citation, ParamRow, BlockTex, Tex, Complexity, Theorem } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Original Paper' },
   { id: 'algorithm',   label: 'Algorithm' },
   { id: 'walkthrough', label: 'Theory → Code' },
+  { id: 'theory',      label: 'Theory' },
+  { id: 'complexity',  label: 'Complexity' },
   { id: 'notes',       label: 'Notes' },
 ];
 
@@ -88,6 +90,29 @@ for (let i = 0; i < attributes.length; i++) {
     logP += Math.log((lk.counts[instance[i]] || 1) / lk.total);
 }
 if (logP > bestScore) { bestScore = logP; best = cv; }  // argmax`}</Code>
+      </Section>
+
+      <Section id="theory" title="Theory">
+        <Theorem n={1}>
+          (Optimality under independence) When the class-conditional distributions are truly
+          independent, Naïve Bayes achieves Bayes-optimal classification. Formally, if{' '}
+          <Tex src="P(\mathbf{x} \mid c) = \prod_i P(x_i \mid c)" /> exactly, then the MAP
+          classifier <Tex src="\arg\max_c P(c \mid \mathbf{x})" /> is the Bayes classifier.
+        </Theorem>
+        <Theorem n={2}>
+          (Domingos &amp; Pazzani, 1997) Even when the independence assumption is violated,
+          Naïve Bayes achieves the Bayes-optimal <em>decision boundary</em> under milder
+          conditions than those required for correct probability estimates — it needs only
+          the correct ranking of class posteriors, not their calibrated values.
+        </Theorem>
+      </Section>
+
+      <Section id="complexity" title="Complexity">
+        <Complexity rows={[
+          { label: 'Training', tex: 'O(n \\cdot d)',       note: 'single pass: compute priors, means, variances, counts' },
+          { label: 'Query',    tex: 'O(c \\cdot d)',       note: 'score each of c classes over d attributes' },
+          { label: 'Space',    tex: 'O(c \\cdot d)',       note: 'one Gaussian or count table per (class, attribute) pair' },
+        ]} />
       </Section>
 
       <Section id="notes" title="Notes">
