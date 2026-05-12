@@ -102,11 +102,11 @@ export default function Home() {
         </Stack>
         <Stack direction="row" spacing={1} sx={{ mt: 3, px: '10vw', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
           {[
-            { label: 'k-NN',        href: '/docs/#knn' },
-            { label: 'Naïve Bayes', href: '/docs/#naivebayes' },
-            { label: 'k-Means',     href: '/docs/#kmeans' },
-            { label: 'ARFF',        href: '/docs/#arff' },
-            { label: 'CSV',         href: '/docs/#csv' },
+            { label: 'k-NN',        href: '/docs/knn/' },
+            { label: 'Naïve Bayes', href: '/docs/naivebayes/' },
+            { label: 'k-Means',     href: '/docs/kmeans/' },
+            { label: 'ARFF',        href: '/docs/arff/' },
+            { label: 'CSV',         href: '/docs/csv/' },
             { label: 'Zero Install' },
           ].map(({ label, href }) => (
             <Chip
@@ -170,7 +170,9 @@ export default function Home() {
           Inspired by{' '}
           <a href="https://ml.cms.waikato.ac.nz/weka/" target="_blank" rel="noreferrer"
             style={{ color: '#6E6E73', textDecoration: 'underline' }}>Weka</a>
-          {' '}from the University of Waikato
+          {' '}from the University of Waikato ·{' '}
+          <a href="https://marin.kokona.website" target="_blank" rel="noreferrer"
+            style={{ color: '#6E6E73', textDecoration: 'underline' }}>marin.kokona.website</a>
         </Typography>
       </Box>
     </Box>

@@ -1,0 +1,21 @@
+export const DOCS_NAV = [
+  { id: 'overview',   label: 'Overview',           href: '/docs/' },
+  {
+    id: 'algorithms', label: 'Learning Algorithms', group: true,
+    children: [
+      { id: 'knn',        label: 'k-Nearest Neighbor', href: '/docs/knn/' },
+      { id: 'naivebayes', label: 'Naïve Bayes',        href: '/docs/naivebayes/' },
+      { id: 'kmeans',     label: 'k-Means Clustering', href: '/docs/kmeans/' },
+    ],
+  },
+  {
+    id: 'formats',    label: 'Data Formats',        group: true,
+    children: [
+      { id: 'arff', label: 'ARFF Format', href: '/docs/arff/' },
+      { id: 'csv',  label: 'CSV Format',  href: '/docs/csv/' },
+    ],
+  },
+  { id: 'datasets',  label: 'Sample Datasets',     href: '/docs/datasets/' },
+];
+
+export const DOCS_FLAT = DOCS_NAV.flatMap(item => item.group ? item.children : [item]);

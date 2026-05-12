@@ -111,7 +111,7 @@ export default function ExplorerShell() {
           </Menu>
 
           <Tooltip title="Dataset reference">
-            <IconButton component={Link} href="/docs/#datasets" size="small" sx={{ color: 'rgba(255,255,255,0.8)', '&:hover': { color: '#fff' } }}>
+            <IconButton component={Link} href="/docs/datasets/" size="small" sx={{ color: 'rgba(255,255,255,0.8)', '&:hover': { color: '#fff' } }}>
               <HelpOutlineIcon fontSize="small" />
             </IconButton>
           </Tooltip>

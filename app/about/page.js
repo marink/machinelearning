@@ -204,7 +204,11 @@ export default function AboutPage() {
 
       <Box sx={{ py: 4, textAlign: 'center', borderTop: '1px solid rgba(0,0,0,0.1)', bgcolor: '#F5F5F7' }}>
         <Typography sx={{ fontSize: 12, color: 'rgba(0,0,0,0.4)' }}>
-          machinelearning.js.org · open source · MIT
+          machinelearning.js.org · open source · MIT ·{' '}
+          <a href="https://marin.kokona.website" target="_blank" rel="noreferrer"
+            style={{ color: 'rgba(0,0,0,0.4)', textDecoration: 'underline' }}>
+            marin.kokona.website
+          </a>
         </Typography>
       </Box>
     </Box>
