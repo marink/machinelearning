@@ -174,6 +174,11 @@ export default function Home() {
           <a href="https://marin.kokona.website" target="_blank" rel="noreferrer"
             style={{ color: '#6E6E73', textDecoration: 'underline' }}>Marin&apos;s Web Site</a>
         </Typography>
+        <Typography sx={{ fontSize: 11, color: '#9E9E9E', mt: 1, maxWidth: 560, mx: 'auto' }}>
+          For educational and research use only. Results are provided &ldquo;as is&rdquo; without
+          warranty of any kind and should not be relied upon for clinical, financial, safety-critical,
+          or other consequential decisions.
+        </Typography>
       </Box>
     </Box>
   );
