@@ -166,6 +166,17 @@ export default function DocsLayout({ children }) {
 
                     <Collapse in={isExp && open} timeout="auto" unmountOnExit>
                       {item.children.map(child => {
+                        if (child.divider) {
+                          return (
+                            <Typography key={child.divider} sx={{
+                              fontSize: 9.5, fontWeight: 700, color: 'rgba(0,0,0,0.28)',
+                              letterSpacing: '0.07em', textTransform: 'uppercase',
+                              px: 2, pt: 1.25, pb: 0.25,
+                            }}>
+                              {child.divider}
+                            </Typography>
+                          );
+                        }
                         const active = isActive(child.href);
                         return (
                           <ListItemButton
@@ -271,7 +282,7 @@ export default function DocsLayout({ children }) {
               machinelearning.js.org · open source · MIT ·{' '}
               <a href="https://marin.kokona.website" target="_blank" rel="noreferrer"
                 style={{ color: 'rgba(0,0,0,0.4)', textDecoration: 'underline' }}>
-                marin.kokona.website
+                Marin&apos;s Web Site
               </a>
             </Typography>
           </Box>

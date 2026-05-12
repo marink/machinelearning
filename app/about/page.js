@@ -207,7 +207,7 @@ export default function AboutPage() {
           machinelearning.js.org · open source · MIT ·{' '}
           <a href="https://marin.kokona.website" target="_blank" rel="noreferrer"
             style={{ color: 'rgba(0,0,0,0.4)', textDecoration: 'underline' }}>
-            marin.kokona.website
+            Marin&apos;s Web Site
           </a>
         </Typography>
       </Box>

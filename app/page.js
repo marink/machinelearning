@@ -172,7 +172,7 @@ export default function Home() {
             style={{ color: '#6E6E73', textDecoration: 'underline' }}>Weka</a>
           {' '}from the University of Waikato ·{' '}
           <a href="https://marin.kokona.website" target="_blank" rel="noreferrer"
-            style={{ color: '#6E6E73', textDecoration: 'underline' }}>marin.kokona.website</a>
+            style={{ color: '#6E6E73', textDecoration: 'underline' }}>Marin&apos;s Web Site</a>
         </Typography>
       </Box>
     </Box>

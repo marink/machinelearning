@@ -13,7 +13,7 @@ const TOC = [
   { id: 'explorer',   label: 'Explorer' },
 ];
 
-const algoItems = DOCS_NAV.find(n => n.id === 'algorithms')?.children ?? [];
+const algoItems = (DOCS_NAV.find(n => n.id === 'algorithms')?.children ?? []).filter(c => !c.divider);
 const fmtItems  = DOCS_NAV.find(n => n.id === 'formats')?.children ?? [];
 
 export default function OverviewPage() {

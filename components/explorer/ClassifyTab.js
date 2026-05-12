@@ -3,26 +3,60 @@
 import { useState } from 'react';
 import {
   Box, Typography, Button, Paper, Grid, FormControl, InputLabel,
-  Select, MenuItem, Slider, CircularProgress, TextField,
+  Select, MenuItem, Slider, CircularProgress,
 } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import * as knn from '@lib/algorithms/knn';
-import * as nb from '@lib/algorithms/naiveBayes';
+import * as knn    from '@lib/algorithms/knn';
+import * as nb     from '@lib/algorithms/naiveBayes';
+import * as dt     from '@lib/algorithms/decisionTree';
+import * as lr     from '@lib/algorithms/logisticRegression';
+import * as svm    from '@lib/algorithms/svm';
+import * as linreg from '@lib/algorithms/linearRegression';
 import { percentageSplit, stratifiedFolds, computeMetrics, formatResults } from '@lib/evaluation';
 
-const ALGORITHMS = {
-  'k-NN (k=1)':  { key: 'knn', k: 1 },
-  'k-NN (k=3)':  { key: 'knn', k: 3 },
-  'k-NN (k=5)':  { key: 'knn', k: 5 },
-  'Naïve Bayes': { key: 'nb' },
+const CLASS_ALGORITHMS = {
+  'k-NN (k=1)':          { key: 'knn', k: 1 },
+  'k-NN (k=3)':          { key: 'knn', k: 3 },
+  'k-NN (k=5)':          { key: 'knn', k: 5 },
+  'Naïve Bayes':         { key: 'nb' },
+  'Decision Tree (ID3)': { key: 'dt' },
+  'Logistic Regression': { key: 'lr' },
+  'SVM':                 { key: 'svm' },
 };
 
+const REG_ALGORITHMS = {
+  'Linear Regression': { key: 'linreg' },
+};
+
+function randomFolds(ds, k) {
+  const shuffled = [...ds.instances].sort(() => Math.random() - 0.5);
+  const folds = Array.from({ length: k }, () => []);
+  shuffled.forEach((inst, i) => folds[i % k].push(inst));
+  return folds.map((_, fi) => ({
+    train: { ...ds, instances: folds.flatMap((f, i) => i !== fi ? f : []) },
+    test:  { ...ds, instances: folds[fi] },
+  }));
+}
+
+function formatRegressionResults(m, algorithmName, testMode, n) {
+  let out = `=== Run information ===\n`;
+  out += `Scheme:    ${algorithmName}\n`;
+  out += `Test mode: ${testMode}\n\n`;
+  out += `=== Summary ===\n\n`;
+  out += `Instances                         ${String(n).padStart(6)}\n`;
+  out += `Correlation coefficient (R²)      ${m.r2.toFixed(4).padStart(8)}\n`;
+  out += `Mean absolute error (MAE)         ${m.mae.toFixed(4).padStart(8)}\n`;
+  out += `Root mean squared error (RMSE)    ${m.rmse.toFixed(4).padStart(8)}\n`;
+  return out;
+}
+
 export default function ClassifyTab({ dataset }) {
-  const [algo, setAlgo]     = useState('k-NN (k=1)');
-  const [mode, setMode]     = useState('cv10');
-  const [splitPct, setSplitPct] = useState(66);
-  const [output, setOutput] = useState('');
-  const [running, setRunning] = useState(false);
+  const [classAlgo, setClassAlgo] = useState('k-NN (k=1)');
+  const [regAlgo,   setRegAlgo]   = useState('Linear Regression');
+  const [mode,      setMode]      = useState('cv10');
+  const [splitPct,  setSplitPct]  = useState(66);
+  const [output,    setOutput]    = useState('');
+  const [running,   setRunning]   = useState(false);
 
   if (!dataset) {
     return (
@@ -32,51 +66,70 @@ export default function ClassifyTab({ dataset }) {
     );
   }
 
-  const classAttr = dataset.attributes[dataset.classIndex];
-  const classValues = classAttr?.values ?? [...new Set(dataset.instances.map(i => i[dataset.classIndex]).filter(v => v !== null))];
+  const classAttr   = dataset.attributes[dataset.classIndex];
+  const isRegression = classAttr?.type === 'numeric';
+  const ALGORITHMS   = isRegression ? REG_ALGORITHMS : CLASS_ALGORITHMS;
+  const algo         = isRegression ? regAlgo : classAlgo;
+  const setAlgo      = isRegression ? setRegAlgo : setClassAlgo;
 
-  function runClassifier() {
+  const classValues = isRegression
+    ? []
+    : (classAttr?.values ?? [...new Set(dataset.instances.map(i => i[dataset.classIndex]).filter(v => v !== null))]);
+
+  function getHandlers() {
+    if (isRegression) return { trainFn: linreg.train, predictFn: linreg.predict };
+    const cfg = ALGORITHMS[algo];
+    switch (cfg.key) {
+      case 'knn': return { trainFn: knn.train,  classifyFn: (m, i) => knn.classify(m, i, cfg.k) };
+      case 'nb':  return { trainFn: nb.train,   classifyFn: nb.classify };
+      case 'dt':  return { trainFn: dt.train,   classifyFn: dt.classify };
+      case 'lr':  return { trainFn: lr.train,   classifyFn: lr.classify };
+      case 'svm': return { trainFn: svm.train,  classifyFn: svm.classify };
+    }
+  }
+
+  function run() {
     setRunning(true);
     setTimeout(() => {
       try {
-        const cfg = ALGORITHMS[algo];
-        const classify = cfg.key === 'knn'
-          ? (model, inst) => knn.classify(model, inst, cfg.k)
-          : nb.classify;
-        const trainFn = cfg.key === 'knn' ? knn.train : nb.train;
-
+        const { trainFn, classifyFn, predictFn } = getHandlers();
+        const infer = isRegression ? predictFn : classifyFn;
         let allPreds = [], allActuals = [];
 
         if (mode === 'train') {
           const model = trainFn(dataset);
           for (const inst of dataset.instances) {
-            allPreds.push(classify(model, inst));
+            allPreds.push(infer(model, inst));
             allActuals.push(inst[dataset.classIndex]);
           }
         } else if (mode === 'pct') {
           const { train, test } = percentageSplit(dataset, splitPct);
           const model = trainFn(train);
           for (const inst of test.instances) {
-            allPreds.push(classify(model, inst));
+            allPreds.push(infer(model, inst));
             allActuals.push(inst[dataset.classIndex]);
           }
         } else {
-          const folds = parseInt(mode.replace('cv', ''));
-          for (const { train, test } of stratifiedFolds(dataset, folds)) {
+          const k = parseInt(mode.replace('cv', ''));
+          const foldSets = isRegression ? randomFolds(dataset, k) : stratifiedFolds(dataset, k);
+          for (const { train, test } of foldSets) {
             const model = trainFn(train);
             for (const inst of test.instances) {
-              allPreds.push(classify(model, inst));
+              allPreds.push(infer(model, inst));
               allActuals.push(inst[dataset.classIndex]);
             }
           }
         }
 
-        const metrics = computeMetrics(allPreds, allActuals, classValues);
         const modeLabel = mode === 'train' ? 'Training set'
           : mode === 'pct' ? `${splitPct}% split`
           : `${mode.replace('cv', '')}-fold cross-validation`;
 
-        setOutput(formatResults(metrics, classValues, algo, modeLabel));
+        if (isRegression) {
+          setOutput(formatRegressionResults(linreg.metrics(allPreds, allActuals), algo, modeLabel, allPreds.length));
+        } else {
+          setOutput(formatResults(computeMetrics(allPreds, allActuals, classValues), classValues, algo, modeLabel));
+        }
       } catch (e) {
         setOutput(`Error: ${e.message}`);
       } finally {
@@ -89,7 +142,9 @@ export default function ClassifyTab({ dataset }) {
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid size={{ xs: 12, md: 4 }}>
         <Paper variant="outlined" sx={{ p: 2 }}>
-          <Typography variant="subtitle2" fontWeight={700} gutterBottom>Classifier</Typography>
+          <Typography variant="subtitle2" fontWeight={700} gutterBottom>
+            {isRegression ? 'Regressor' : 'Classifier'}
+          </Typography>
           <FormControl fullWidth size="small" sx={{ mb: 2 }}>
             <InputLabel>Algorithm</InputLabel>
             <Select value={algo} label="Algorithm" onChange={e => setAlgo(e.target.value)}>
@@ -117,8 +172,9 @@ export default function ClassifyTab({ dataset }) {
           )}
 
           <Button
-            variant="contained" fullWidth startIcon={running ? <CircularProgress size={16} color="inherit" /> : <PlayArrowIcon />}
-            onClick={runClassifier} disabled={running}
+            variant="contained" fullWidth
+            startIcon={running ? <CircularProgress size={16} color="inherit" /> : <PlayArrowIcon />}
+            onClick={run} disabled={running}
             sx={{ mt: 2, bgcolor: '#00796B', '&:hover': { bgcolor: '#00695C' } }}
           >
             {running ? 'Running…' : 'Start'}
@@ -129,7 +185,9 @@ export default function ClassifyTab({ dataset }) {
       <Grid size={{ xs: 12, md: 8 }}>
         <Paper variant="outlined" sx={{ p: 0, overflow: 'hidden' }}>
           <Box sx={{ p: 1.5, bgcolor: '#004D40', color: '#fff' }}>
-            <Typography variant="subtitle2" fontWeight={700}>Classifier output</Typography>
+            <Typography variant="subtitle2" fontWeight={700}>
+              {isRegression ? 'Regressor output' : 'Classifier output'}
+            </Typography>
           </Box>
           <Box className="output-panel" sx={{ minHeight: 320, maxHeight: 480, borderRadius: 0 }}>
             {output || 'Results will appear here after running…'}
