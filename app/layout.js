@@ -3,6 +3,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import theme from '@theme';
 import './globals.css';
+import 'katex/dist/katex.min.css';
 
 export const metadata = {
   title: 'MachineLearning.js',

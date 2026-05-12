@@ -2,7 +2,7 @@
 
 import { Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, StepLabel, Citation, ParamRow } from '@components/docs/DocComponents';
+import { Section, Para, Code, StepLabel, Citation, ParamRow, BlockTex } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Original Paper' },
@@ -36,19 +36,10 @@ export default function LogisticRegressionPage() {
           models P(y=1|x) = σ(w·x + b), where σ is the sigmoid function. The weights w and
           bias b are learned by minimising binary cross-entropy loss via gradient descent.
         </Para>
-        <Code>{`Sigmoid:    σ(z) = 1 / (1 + e^{−z})
-
-Loss (binary cross-entropy):
-  L(w, b) = −(1/n) Σ [ yᵢ log σ(zᵢ) + (1−yᵢ) log(1−σ(zᵢ)) ]
-  where zᵢ = w·xᵢ + b
-
-Gradient:
-  ∂L/∂w = (1/n) X^T (σ(Xw) − y)
-  ∂L/∂b = (1/n) Σ (σ(zᵢ) − yᵢ)
-
-Update:
-  w ← w − η · ∂L/∂w
-  b ← b − η · ∂L/∂b`}</Code>
+        <BlockTex label="Sigmoid" src="\sigma(z) = \frac{1}{1 + e^{-z}}" />
+        <BlockTex label="Loss (binary cross-entropy),  zᵢ = w·xᵢ + b" src="L(\mathbf{w}, b) = -\frac{1}{n}\sum_{i}\bigl[y_i\log\sigma(z_i) + (1-y_i)\log(1-\sigma(z_i))\bigr]" />
+        <BlockTex label="Gradient" src="\frac{\partial L}{\partial \mathbf{w}} = \frac{1}{n}X^\top\!\bigl(\sigma(X\mathbf{w}) - \mathbf{y}\bigr), \qquad \frac{\partial L}{\partial b} = \frac{1}{n}\sum_{i}(\sigma(z_i) - y_i)" />
+        <BlockTex label="Update" src="\mathbf{w} \leftarrow \mathbf{w} - \eta\,\frac{\partial L}{\partial \mathbf{w}}, \qquad b \leftarrow b - \eta\,\frac{\partial L}{\partial b}" />
         <Para>
           Multi-class problems are handled with <strong>one-vs-rest (OvR)</strong>: one binary
           classifier is trained per class, and the class with the highest sigmoid score wins.

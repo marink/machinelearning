@@ -2,7 +2,7 @@
 
 import { Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, StepLabel, Citation, ParamRow } from '@components/docs/DocComponents';
+import { Section, Para, Code, StepLabel, Citation, ParamRow, BlockTex, Algo, Line, Kw } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Original Paper' },
@@ -36,12 +36,13 @@ export default function KMeansPage() {
           It uses only numeric attributes (the class attribute is ignored).
           MacQueen&apos;s formulation is the standard Lloyd&apos;s algorithm:
         </Para>
-        <Code>{`1. Initialise k centroids (random instances from the dataset)
-2. Repeat until no assignment changes (or maxIter reached):
-   a. Assign each instance to the nearest centroid
-      (Euclidean distance on numeric attributes)
-   b. Recompute each centroid as the mean of its assigned instances
-3. Report assignments, centroid values, cluster sizes, and WCSS`}</Code>
+        <Algo title="Algorithm: Lloyd's k-Means">
+          <Line>1. Initialise <Kw>k</Kw> centroids by random sampling from the dataset</Line>
+          <Line>2. <Kw>repeat until</Kw> no assignment changes (or maxIter reached):</Line>
+          <Line indent={1}>a. Assign each instance to its nearest centroid (Euclidean distance)</Line>
+          <Line indent={1}>b. Recompute each centroid as the mean of its assigned instances</Line>
+          <Line>3. Report assignments, centroid values, cluster sizes, and WCSS</Line>
+        </Algo>
         <Para>
           Lloyd&apos;s algorithm is guaranteed to converge in a finite number of steps because
           the number of possible assignments is finite and WCSS strictly decreases at each iteration.
@@ -85,12 +86,11 @@ assignments = newAssign;
 if (!changed) break;   // Lloyd's algorithm is guaranteed to converge`}</Code>
 
         <StepLabel n={5} label="WCSS — within-cluster sum of squares (objective function)" />
-        <Code>{`// WCSS = Σᵢ Σⱼ∈cluster(i) ||xⱼ − centroidᵢ||²
-// Lower WCSS → tighter clusters. Always decreases as k increases,
-// so only compare models with the same k value (elbow method).
-const wcss = projected.reduce((s, p, j) =>
+        <BlockTex src="\text{WCSS} = \sum_{k=1}^{K}\sum_{\mathbf{x}\,\in\, C_k} \|\mathbf{x} - \boldsymbol{\mu}_k\|^2" />
+        <Code>{`const wcss = projected.reduce((s, p, j) =>
   s + idxs.reduce((s2, _, ii) =>
-    s2 + (p[ii] - centroids[assignments[j]][ii]) ** 2, 0), 0);`}</Code>
+    s2 + (p[ii] - centroids[assignments[j]][ii]) ** 2, 0), 0);
+// Lower WCSS → tighter clusters; only compare across models with the same k.`}</Code>
       </Section>
 
       <Section id="parameters" title="Parameters">

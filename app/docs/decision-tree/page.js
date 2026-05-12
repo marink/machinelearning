@@ -2,7 +2,7 @@
 
 import { Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, StepLabel, Citation, ParamRow } from '@components/docs/DocComponents';
+import { Section, Para, Code, StepLabel, Citation, ParamRow, Tex, BlockTex, Algo, Line, Kw } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Original Paper' },
@@ -36,23 +36,18 @@ export default function DecisionTreePage() {
           at each node, the attribute that maximises information gain — the reduction in entropy
           when the data is partitioned by that attribute.
         </Para>
-        <Code>{`BuildTree(instances S, attributes A):
-  if all instances in S have the same class:
-    return Leaf(that class)
-  if A is empty or max depth reached:
-    return Leaf(majority class in S)
-
-  a* = argmax_{a ∈ A} InformationGain(S, a)
-  create node splitting on a*
-
-  for each value v of a*:
-    Sᵥ = instances in S where a* = v
-    child = BuildTree(Sᵥ, A \\ {a*})
-    attach child for branch v`}</Code>
-        <Para>
-          <strong>Information Gain:</strong> IG(S, a) = H(S) − Σᵥ (|Sᵥ|/|S|) · H(Sᵥ),
-          where H is Shannon entropy: H(S) = −Σ p_c log₂(p_c).
-        </Para>
+        <Algo title="Algorithm: ID3 BuildTree">
+          <Line>BuildTree(<Tex src="S" />, <Tex src="A" />):</Line>
+          <Line indent={1}><Kw>if</Kw> all instances in <Tex src="S" /> share one class → <Kw>return</Kw> Leaf(class)</Line>
+          <Line indent={1}><Kw>if</Kw> <Tex src="A = \emptyset" /> or max depth → <Kw>return</Kw> Leaf(majority class in <Tex src="S" />)</Line>
+          <Line indent={1}><Tex src="a^* \leftarrow \arg\max_{a \in A}\, IG(S, a)" /></Line>
+          <Line indent={1}>create node splitting on <Tex src="a^*" /></Line>
+          <Line indent={1}><Kw>for each</Kw> value <Tex src="v" /> of <Tex src="a^*" />:</Line>
+          <Line indent={2}><Tex src="S_v \leftarrow \{\,\mathbf{x} \in S : \mathbf{x}[a^*] = v\,\}" /></Line>
+          <Line indent={2}>attach BuildTree(<Tex src="S_v" />, <Tex src="A \setminus \{a^*\}" />) for branch <Tex src="v" /></Line>
+        </Algo>
+        <BlockTex label="Information Gain" src="IG(S,\, a) = H(S) - \sum_{v} \frac{|S_v|}{|S|} \cdot H(S_v)" />
+        <BlockTex label="Shannon Entropy" src="H(S) = -\sum_{c} p_c \log_2 p_c" />
         <Para>
           <strong>Numeric attributes</strong> are handled with binary splits — the algorithm
           tries every midpoint between adjacent sorted values and picks the threshold with

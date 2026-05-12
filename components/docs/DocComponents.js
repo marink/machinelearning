@@ -2,6 +2,7 @@
 
 import { Box, Typography, Paper, Chip, Divider } from '@mui/material';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import katex from 'katex';
 
 export function Section({ id, title, children }) {
   return (
@@ -100,6 +101,90 @@ export function ParamRow({ label, desc }) {
     <Box sx={{ mb: 1.5 }}>
       <Chip label={label} size="small" color="primary" sx={{ mr: 1 }} />
       <Typography component="span" sx={{ fontSize: 15, color: 'rgba(0,0,0,0.65)' }}>{desc}</Typography>
+    </Box>
+  );
+}
+
+// ── KaTeX math rendering ───────────────────────────────────────────────────
+
+function renderTex(src, display) {
+  try {
+    return katex.renderToString(src, { throwOnError: false, displayMode: display });
+  } catch {
+    return src;
+  }
+}
+
+export function Tex({ src }) {
+  return (
+    <Box
+      component="span"
+      dangerouslySetInnerHTML={{ __html: renderTex(src, false) }}
+      sx={{ verticalAlign: 'baseline' }}
+    />
+  );
+}
+
+export function BlockTex({ src, label }) {
+  return (
+    <Box sx={{ my: 2 }}>
+      {label && (
+        <Typography sx={{ fontSize: 12, fontWeight: 700, color: 'rgba(0,0,0,0.38)', textTransform: 'uppercase', letterSpacing: '0.06em', mb: 0.5 }}>
+          {label}
+        </Typography>
+      )}
+      <Box
+        dangerouslySetInnerHTML={{ __html: renderTex(src, true) }}
+        sx={{
+          overflowX: 'auto',
+          py: 1,
+          px: 2,
+          bgcolor: '#F8F9FB',
+          border: '1px solid rgba(0,0,0,0.08)',
+          borderRadius: 2,
+        }}
+      />
+    </Box>
+  );
+}
+
+// ── Algorithm pseudocode block ─────────────────────────────────────────────
+
+export function Algo({ title, children }) {
+  return (
+    <Paper variant="outlined" sx={{
+      my: 2, borderRadius: 2, overflow: 'hidden',
+      borderColor: 'rgba(0,0,0,0.12)',
+      borderLeft: '3px solid #1565C0',
+    }}>
+      {title && (
+        <Box sx={{ px: 2.5, py: 0.75, bgcolor: '#F0F4FF', borderBottom: '1px solid rgba(21,101,192,0.15)' }}>
+          <Typography sx={{ fontSize: 12, fontWeight: 700, color: '#1565C0', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            {title}
+          </Typography>
+        </Box>
+      )}
+      <Box sx={{ px: 2.5, py: 1.75, display: 'flex', flexDirection: 'column', gap: 0.3, bgcolor: '#FAFBFF' }}>
+        {children}
+      </Box>
+    </Paper>
+  );
+}
+
+export function Line({ indent = 0, children }) {
+  return (
+    <Box sx={{ pl: indent * 2.5, lineHeight: 1.8 }}>
+      <Typography component="span" sx={{ fontSize: 14.5, color: '#1d1d1f', fontFamily: 'inherit' }}>
+        {children}
+      </Typography>
+    </Box>
+  );
+}
+
+export function Kw({ children }) {
+  return (
+    <Box component="span" sx={{ fontWeight: 600, fontStyle: 'italic', color: '#1565C0' }}>
+      {children}
     </Box>
   );
 }

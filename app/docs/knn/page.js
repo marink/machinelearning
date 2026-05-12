@@ -2,7 +2,7 @@
 
 import { Box, Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, SubHead, StepLabel, Citation, ParamRow } from '@components/docs/DocComponents';
+import { Section, Para, Code, SubHead, StepLabel, Citation, ParamRow, Tex, BlockTex, Algo, Line, Kw } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Original Paper' },
@@ -37,10 +37,11 @@ export default function KnnPage() {
           by finding the k closest training examples (by distance) and taking a majority vote of
           their class labels. There is no training phase; all computation happens at query time.
         </Para>
-        <Code>{`For a new instance x:
-  1. Compute distance(x, xᵢ) for every training instance xᵢ
-  2. Sort by distance, take the k smallest
-  3. Return the most common class label among those k neighbours`}</Code>
+        <Algo title="Algorithm: k-NN Classify">
+          <Line><Kw>for</Kw> each training instance <Tex src="\mathbf{x}_i" />: compute <Tex src="d(\mathbf{x},\, \mathbf{x}_i)" /></Line>
+          <Line>Sort by distance; select the <Tex src="k" /> nearest neighbours <Tex src="\mathcal{N}_k(\mathbf{x})" /></Line>
+          <Line><Kw>return</Kw> <Tex src="\arg\max_c \;\#\{c \in \mathcal{N}_k(\mathbf{x})\}" /> (majority vote)</Line>
+        </Algo>
         <Para>
           Cover &amp; Hart prove that the 1-NN error rate asymptotically cannot exceed twice the
           Bayes error rate — making k-NN a theoretical lower bound for non-parametric classification.
@@ -54,11 +55,12 @@ export default function KnnPage() {
           Nominal attributes use the overlap metric (0 if equal, 1 otherwise).
           Missing values contribute a worst-case penalty of 1.
         </Para>
-        <Code>{`dist(a, b) = √Σᵢ dᵢ(aᵢ, bᵢ)²
-
-numeric:  dᵢ = (aᵢ − bᵢ) / range(i)   (normalized Euclidean)
-nominal:  dᵢ = 0 if aᵢ = bᵢ, else 1   (overlap)
-missing:  dᵢ = 1                        (maximum penalty)`}</Code>
+        <BlockTex src="d(\mathbf{a},\, \mathbf{b}) = \sqrt{\sum_{i} d_i(a_i, b_i)^2}" />
+        <Algo title="Per-attribute distance dᵢ">
+          <Line>numeric: <Tex src="d_i = \dfrac{a_i - b_i}{\operatorname{range}(i)}" /> (normalised Euclidean)</Line>
+          <Line>nominal: <Tex src="d_i = 0 \text{ if } a_i = b_i,\; \text{else } 1" /> (overlap metric)</Line>
+          <Line>missing: <Tex src="d_i = 1" /> (maximum penalty)</Line>
+        </Algo>
       </Section>
 
       <Section id="walkthrough" title="Theory → Code">

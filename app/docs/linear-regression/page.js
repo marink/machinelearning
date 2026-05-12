@@ -2,7 +2,7 @@
 
 import { Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, StepLabel, Citation, ParamRow } from '@components/docs/DocComponents';
+import { Section, Para, Code, StepLabel, Citation, ParamRow, Tex, BlockTex } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Reference' },
@@ -37,19 +37,13 @@ export default function LinearRegressionPage() {
           ŷ = w·x + b. The weights w and bias b minimise mean squared error (MSE) over the
           training set. This implementation uses gradient descent on the MSE loss.
         </Para>
-        <Code>{`Model:   ŷᵢ = w·xᵢ + b
-
-Loss:    L(w,b) = (1/n) Σ (ŷᵢ − yᵢ)²   (Mean Squared Error)
-
-Gradient:
-  ∂L/∂w = (2/n) X^T (Xw − y)
-  ∂L/∂b = (2/n) Σ (ŷᵢ − yᵢ)
-
-Update:
-  w ← w − η · ∂L/∂w
-  b ← b − η · ∂L/∂b`}</Code>
+        <BlockTex label="Model" src="\hat{y}_i = \mathbf{w} \cdot \mathbf{x}_i + b" />
+        <BlockTex label="Loss (Mean Squared Error)" src="L(\mathbf{w}, b) = \frac{1}{n}\sum_{i}(\hat{y}_i - y_i)^2" />
+        <BlockTex label="Gradient" src="\frac{\partial L}{\partial \mathbf{w}} = \frac{2}{n}X^\top(X\mathbf{w} - \mathbf{y}), \qquad \frac{\partial L}{\partial b} = \frac{2}{n}\sum_{i}(\hat{y}_i - y_i)" />
+        <BlockTex label="Update" src="\mathbf{w} \leftarrow \mathbf{w} - \eta\,\frac{\partial L}{\partial \mathbf{w}}, \qquad b \leftarrow b - \eta\,\frac{\partial L}{\partial b}" />
         <Para>
-          The closed-form <strong>Normal Equations</strong> solution — w = (XᵀX)⁻¹Xᵀy — is
+          The closed-form <strong>Normal Equations</strong> solution —{' '}
+          <Tex src="\mathbf{w} = (X^\top X)^{-1} X^\top \mathbf{y}" /> — is
           mathematically equivalent but requires a matrix inverse that is numerically unstable
           for ill-conditioned feature sets. Gradient descent is preferred for general use.
         </Para>

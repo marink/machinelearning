@@ -2,7 +2,7 @@
 
 import { Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, StepLabel, Citation, ParamRow } from '@components/docs/DocComponents';
+import { Section, Para, Code, StepLabel, Citation, ParamRow, Tex, BlockTex, Algo, Line, Kw } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Original Paper' },
@@ -36,17 +36,15 @@ export default function SvmPage() {
           possible margin (2/‖w‖). The <strong>soft-margin</strong> variant (Cortes & Vapnik)
           allows misclassifications via slack variables ξᵢ, controlled by the penalty parameter C.
         </Para>
-        <Code>{`Primal objective (soft-margin):
-  min_{w,b}  ½‖w‖² + C · Σ ξᵢ
-  subject to yᵢ(w·xᵢ + b) ≥ 1 − ξᵢ,  ξᵢ ≥ 0
-
-Equivalent unconstrained form (hinge loss):
-  L(w,b) = λ‖w‖² + C · Σ max(0, 1 − yᵢ(w·xᵢ + b))
-  where λ = 1/(C·n)
-
-SGD update per instance:
-  if yᵢ(w·xᵢ + b) ≥ 1:   w ← (1 − 2λη)w            (regularise only)
-  else:                    w ← (1 − 2λη)w + ηCyᵢxᵢ   (regularise + hinge)`}</Code>
+        <BlockTex label="Primal objective (soft-margin)" src="\min_{\mathbf{w},\,b}\;\tfrac{1}{2}\|\mathbf{w}\|^2 + C\sum_{i}\xi_i \quad \text{s.t.}\quad y_i(\mathbf{w}\cdot\mathbf{x}_i + b) \ge 1 - \xi_i,\;\xi_i \ge 0" />
+        <BlockTex label="Hinge loss (equivalent unconstrained form)" src="L(\mathbf{w}, b) = \lambda\|\mathbf{w}\|^2 + C\sum_{i}\max\!\bigl(0,\;1 - y_i(\mathbf{w}\cdot\mathbf{x}_i + b)\bigr),\quad \lambda = \tfrac{1}{Cn}" />
+        <Algo title="SGD update per instance">
+          <Line><Kw>if</Kw> <Tex src="y_i(\mathbf{w}\cdot\mathbf{x}_i + b) \ge 1" />:</Line>
+          <Line indent={1}><Tex src="\mathbf{w} \leftarrow (1 - 2\lambda\eta)\,\mathbf{w}" /> (L2 regularise only)</Line>
+          <Line><Kw>else</Kw>:</Line>
+          <Line indent={1}><Tex src="\mathbf{w} \leftarrow (1 - 2\lambda\eta)\,\mathbf{w} + \eta C y_i \mathbf{x}_i" /> (regularise + hinge)</Line>
+          <Line indent={1}><Tex src="b \leftarrow b + \eta C y_i" /></Line>
+        </Algo>
         <Para>
           Multi-class problems use <strong>one-vs-rest</strong>: one SVM per class. The class
           whose decision function w·x + b gives the highest score wins.

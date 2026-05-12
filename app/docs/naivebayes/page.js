@@ -2,7 +2,7 @@
 
 import { Box, Alert } from '@mui/material';
 import DocPage from '@components/docs/DocPage';
-import { Section, Para, Code, SubHead, StepLabel, Citation, ParamRow } from '@components/docs/DocComponents';
+import { Section, Para, Code, StepLabel, Citation, ParamRow, BlockTex } from '@components/docs/DocComponents';
 
 const TOC = [
   { id: 'paper',       label: 'Original Paper' },
@@ -35,13 +35,9 @@ export default function NaiveBayesPage() {
           conditionally independent given the class. Despite this rarely being true in practice,
           it often performs surprisingly well — especially on text and high-dimensional data.
         </Para>
-        <Code>{`P(class | x) ∝ P(class) × ∏ P(xᵢ | class)
-
-Numeric attributes — Gaussian distribution (John & Langley §3):
-  P(xᵢ | class) = (1/√(2πσ²)) × exp(−(x − μ)² / 2σ²)
-
-Nominal attributes — Laplace-smoothed frequency counts:
-  P(xᵢ = v | class) = (count(v in class) + 1) / (count(class) + |values|)`}</Code>
+        <BlockTex label="Bayes Rule (conditional independence)" src="P(c \mid \mathbf{x}) \propto P(c)\prod_{i} P(x_i \mid c)" />
+        <BlockTex label="Numeric — Gaussian likelihood (John & Langley §3)" src="P(x_i \mid c) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)" />
+        <BlockTex label="Nominal — Laplace-smoothed counts" src="P(x_i = v \mid c) = \frac{\#(v,\,c) + 1}{\#(c) + |V_i|}" />
         <Para>
           John &amp; Langley&apos;s key contribution is extending the classic discrete Naïve Bayes
           model to handle continuous attributes with Gaussian density estimation, making it practical
