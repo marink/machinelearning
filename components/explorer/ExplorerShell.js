@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Box, AppBar, Toolbar, Typography, Button, Tabs, Tab, Paper,
   Menu, MenuItem, ButtonGroup, Chip, Stack, Divider,
 } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DatasetIcon from '@mui/icons-material/Dataset';
+import HistoryIcon from '@mui/icons-material/History';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import HomeIcon from '@mui/icons-material/Home';
 import HelpOutlineIcon from '@mui/icons-material/HelpCenter';
@@ -14,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Link from 'next/link';
 import { autoparse } from '@lib/parser';
+import db from '@lib/db';
 import PreprocessTab from './PreprocessTab';
 import DataTab from './DataTab';
 import ClassifyTab from './ClassifyTab';
@@ -26,12 +28,36 @@ const SAMPLE_DATASETS = [
 ];
 
 export default function ExplorerShell() {
-  const [tab, setTab]         = useState(0);
-  const [dataset, setDataset] = useState(null);
-  const [dsName, setDsName]   = useState('');
-  const [error, setError]     = useState('');
+  const [tab, setTab]           = useState(0);
+  const [dataset, setDataset]   = useState(null);
+  const [dsName, setDsName]     = useState('');
+  const [error, setError]       = useState('');
+  const [restored, setRestored] = useState(false);
+  const [recentFiles, setRecentFiles] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const fileRef = useRef();
+
+  // Restore last session and populate recent list on mount
+  useEffect(() => {
+    db.recent.orderBy('savedAt').reverse().limit(5).toArray().then(entries => {
+      if (!entries.length) return;
+      setRecentFiles(entries.map(e => e.name));
+      // Restore the most recent dataset
+      const { name, attributes, instances, classIndex } = entries[0];
+      setDataset({ attributes, instances, classIndex });
+      setDsName(name);
+      setRestored(true);
+    }).catch(() => {});
+  }, []);
+
+  async function persist(ds, name) {
+    try {
+      await db.recent.put({ name, ...ds, savedAt: Date.now() });
+      const all = await db.recent.orderBy('savedAt').reverse().toArray();
+      if (all.length > 5) await db.recent.bulkDelete(all.slice(5).map(r => r.name));
+      setRecentFiles(all.slice(0, 5).map(e => e.name));
+    } catch (e) { /* silently ignore — IDB may be unavailable in private browsing */ }
+  }
 
   async function loadFile(file) {
     try {
@@ -40,6 +66,8 @@ export default function ExplorerShell() {
       setDataset(ds);
       setDsName(file.name);
       setError('');
+      setRestored(false);
+      persist(ds, file.name);
     } catch (e) {
       setError(e.message);
     }
@@ -54,8 +82,26 @@ export default function ExplorerShell() {
       setDataset(ds);
       setDsName(name);
       setError('');
+      setRestored(false);
+      persist(ds, name);
     } catch (e) {
       setError(e.message);
+    }
+    setAnchorEl(null);
+  }
+
+  async function loadRecent(name) {
+    try {
+      const entry = await db.recent.get(name);
+      if (entry) {
+        const { attributes, instances, classIndex } = entry;
+        setDataset({ attributes, instances, classIndex });
+        setDsName(name);
+        setError('');
+        setRestored(false);
+      }
+    } catch (e) {
+      setError('Could not load from cache');
     }
     setAnchorEl(null);
   }
@@ -99,6 +145,21 @@ export default function ExplorerShell() {
           </ButtonGroup>
 
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
+            {/* Recent files */}
+            {recentFiles.length > 0 && [
+              <MenuItem key="recent-hdr" disabled sx={{ fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.4)', letterSpacing: '0.06em', textTransform: 'uppercase', py: 0.5, minHeight: 0 }}>
+                Recent
+              </MenuItem>,
+              ...recentFiles.map(name => (
+                <MenuItem key={`r-${name}`} onClick={() => loadRecent(name)}
+                  sx={{ fontFamily: 'monospace', fontSize: 13, pl: 2.5, gap: 1 }}>
+                  <HistoryIcon sx={{ fontSize: 14, color: 'rgba(0,0,0,0.35)' }} />{name}
+                </MenuItem>
+              )),
+              <Divider key="recent-div" />,
+            ]}
+
+            {/* Sample datasets */}
             {SAMPLE_DATASETS.map(({ label, items }, gi) => [
               gi > 0 && <Divider key={`div-${gi}`} />,
               <MenuItem key={label} disabled sx={{ fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.4)', letterSpacing: '0.06em', textTransform: 'uppercase', py: 0.5, minHeight: 0 }}>
@@ -129,6 +190,10 @@ export default function ExplorerShell() {
                 <Chip label={`${dataset.instances.length} instances`} size="small" color="primary" sx={{ height: 18, fontSize: 11 }} />
                 <Chip label={`${dataset.attributes.length} attributes`} size="small" sx={{ height: 18, fontSize: 11 }} />
                 <Chip label={`class: ${dataset.attributes[dataset.classIndex]?.name}`} size="small" color="secondary" sx={{ height: 18, fontSize: 11 }} />
+                {restored && (
+                  <Chip icon={<HistoryIcon sx={{ fontSize: '12px !important' }} />} label="restored" size="small"
+                    sx={{ height: 18, fontSize: 11, bgcolor: 'rgba(0,0,0,0.06)', color: 'rgba(0,0,0,0.5)' }} />
+                )}
               </Stack>
             )
           }
