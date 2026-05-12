@@ -5,15 +5,9 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { Box, Typography, Chip } from '@mui/material';
 
 export default function DataTab({ dataset }) {
-  if (!dataset) {
-    return (
-      <Box sx={{ p: 4, textAlign: 'center', color: 'text.secondary' }}>
-        <Typography>Load a dataset to view the data.</Typography>
-      </Box>
-    );
-  }
-
-  const { attributes, instances, classIndex } = dataset;
+  const attributes = dataset?.attributes ?? [];
+  const instances  = dataset?.instances  ?? [];
+  const classIndex = dataset?.classIndex ?? -1;
 
   const columns = useMemo(() =>
     attributes.map((attr, i) => ({
@@ -97,6 +91,14 @@ export default function DataTab({ dataset }) {
       </Box>
     ),
   });
+
+  if (!dataset) {
+    return (
+      <Box sx={{ p: 4, textAlign: 'center', color: 'text.secondary' }}>
+        <Typography>Load a dataset to view the data.</Typography>
+      </Box>
+    );
+  }
 
   return <MaterialReactTable table={table} />;
 }
