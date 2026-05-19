@@ -9,6 +9,7 @@ export const DOCS_NAV = [
       { id: 'decision-tree',       label: 'Decision Tree (ID3)',   href: '/docs/decision-tree/' },
       { id: 'logistic-regression', label: 'Logistic Regression',   href: '/docs/logistic-regression/' },
       { id: 'svm',                 label: 'Support Vector Machine',href: '/docs/svm/' },
+      { id: 'neural-network',      label: 'Neural Network (MLP)',  href: '/docs/neural-network/' },
       { divider: 'Regression' },
       { id: 'linear-regression',   label: 'Linear Regression',     href: '/docs/linear-regression/' },
       { divider: 'Clustering' },
