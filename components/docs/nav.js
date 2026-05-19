@@ -13,6 +13,8 @@ export const DOCS_NAV = [
       { id: 'linear-regression',   label: 'Linear Regression',     href: '/docs/linear-regression/' },
       { divider: 'Clustering' },
       { id: 'kmeans',              label: 'k-Means Clustering',    href: '/docs/kmeans/' },
+      { divider: 'Structure Learning' },
+      { id: 'k2',                  label: 'K2 Algorithm',          href: '/docs/k2/' },
     ],
   },
   {

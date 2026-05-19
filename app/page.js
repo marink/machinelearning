@@ -8,6 +8,7 @@ import ScienceIcon from '@mui/icons-material/Science';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import BubbleChartIcon from '@mui/icons-material/BubbleChart';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import HubIcon from '@mui/icons-material/Hub';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import Link from 'next/link';
 import NeuralBackground from '@components/NeuralBackground';
@@ -36,6 +37,12 @@ const features = [
     title: 'Visualize',
     desc: 'Explore your data with interactive 2-D scatter plots — select any two attributes and colour by class.',
     href: '/explorer/',
+  },
+  {
+    icon: <HubIcon sx={{ fontSize: 40, color: '#563d7c' }} />,
+    title: 'BN Builder',
+    desc: 'Build and query Bayesian Networks interactively. Set CPTs, observe evidence, run exact inference.',
+    href: '/builder/',
   },
 ];
 
@@ -105,8 +112,8 @@ export default function Home() {
             { label: 'k-NN',        href: '/docs/knn/' },
             { label: 'Naïve Bayes', href: '/docs/naivebayes/' },
             { label: 'k-Means',     href: '/docs/kmeans/' },
-            { label: 'ARFF',        href: '/docs/arff/' },
-            { label: 'CSV',         href: '/docs/csv/' },
+            { label: 'K2',          href: '/docs/k2/' },
+            { label: 'BN Builder',  href: '/builder/' },
             { label: 'Zero Install' },
           ].map(({ label, href }) => (
             <Chip
