@@ -66,8 +66,8 @@ export default function ClusterTab({ dataset }) {
   const xOrigIdx = numericAttrs[xSel]?.origIdx ?? -1;
   const yOrigIdx = numericAttrs[ySel]?.origIdx ?? -1;
 
-  // Build scatter points grouped by cluster
-  const scatterByCluster = result
+  // Build scatter points grouped by cluster (only when clustering succeeded)
+  const scatterByCluster = result && !result.error
     ? Array.from({ length: k }, (_, ki) =>
         dataset.instances
           .map((inst, i) => ({ x: inst[xOrigIdx], y: inst[yOrigIdx], ci: result.assignments[i] }))
@@ -76,7 +76,7 @@ export default function ClusterTab({ dataset }) {
     : [];
 
   // Build centroid scatter points
-  const centroidPoints = result
+  const centroidPoints = result && !result.error
     ? result.centroids.map((c, ki) => {
         const cx = result.attrIndices.indexOf(xOrigIdx);
         const cy = result.attrIndices.indexOf(yOrigIdx);

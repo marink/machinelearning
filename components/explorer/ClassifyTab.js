@@ -12,16 +12,20 @@ import * as dt     from '@lib/algorithms/decisionTree';
 import * as lr     from '@lib/algorithms/logisticRegression';
 import * as svm    from '@lib/algorithms/svm';
 import * as linreg from '@lib/algorithms/linearRegression';
+import * as k2bn   from '@lib/algorithms/k2';
+import * as mlp    from '@lib/algorithms/mlp';
 import { percentageSplit, stratifiedFolds, computeMetrics, formatResults } from '@lib/evaluation';
 
 const CLASS_ALGORITHMS = {
-  'k-NN (k=1)':          { key: 'knn', k: 1 },
-  'k-NN (k=3)':          { key: 'knn', k: 3 },
-  'k-NN (k=5)':          { key: 'knn', k: 5 },
-  'Naïve Bayes':         { key: 'nb' },
-  'Decision Tree (ID3)': { key: 'dt' },
-  'Logistic Regression': { key: 'lr' },
-  'SVM':                 { key: 'svm' },
+  'k-NN (k=1)':            { key: 'knn', k: 1 },
+  'k-NN (k=3)':            { key: 'knn', k: 3 },
+  'k-NN (k=5)':            { key: 'knn', k: 5 },
+  'Naïve Bayes':           { key: 'nb' },
+  'Decision Tree (ID3)':   { key: 'dt' },
+  'Logistic Regression':   { key: 'lr' },
+  'SVM':                   { key: 'svm' },
+  'Neural Network (MLP)':  { key: 'mlp' },
+  'Bayesian Network (K2)': { key: 'k2' },
 };
 
 const REG_ALGORITHMS = {
@@ -50,13 +54,18 @@ function formatRegressionResults(m, algorithmName, testMode, n) {
   return out;
 }
 
-export default function ClassifyTab({ dataset }) {
+export default function ClassifyTab({ dataset, onBnExport, onNnExport }) {
   const [classAlgo, setClassAlgo] = useState('k-NN (k=1)');
   const [regAlgo,   setRegAlgo]   = useState('Linear Regression');
   const [mode,      setMode]      = useState('cv10');
   const [splitPct,  setSplitPct]  = useState(66);
   const [output,    setOutput]    = useState('');
   const [running,   setRunning]   = useState(false);
+  const [bnExport,     setBnExport]     = useState(null);
+  const [networkReady, setNetworkReady] = useState(false);
+
+  function exportBn(val) { setBnExport(val); onBnExport?.(val); if (val) { onNnExport?.(null); setNetworkReady(true); } else setNetworkReady(false); }
+  function exportNn(val) { onNnExport?.(val); if (val) { setBnExport(null); onBnExport?.(null); setNetworkReady(true); } else setNetworkReady(false); }
 
   if (!dataset) {
     return (
@@ -85,6 +94,8 @@ export default function ClassifyTab({ dataset }) {
       case 'dt':  return { trainFn: dt.train,   classifyFn: dt.classify };
       case 'lr':  return { trainFn: lr.train,   classifyFn: lr.classify };
       case 'svm': return { trainFn: svm.train,  classifyFn: svm.classify };
+      case 'mlp': return { trainFn: mlp.train,  classifyFn: mlp.classify };
+      case 'k2':  return { trainFn: k2bn.train, classifyFn: k2bn.classify };
     }
   }
 
@@ -127,11 +138,27 @@ export default function ClassifyTab({ dataset }) {
 
         if (isRegression) {
           setOutput(formatRegressionResults(linreg.metrics(allPreds, allActuals), algo, modeLabel, allPreds.length));
+          exportBn(null);
         } else {
           setOutput(formatResults(computeMetrics(allPreds, allActuals, classValues), classValues, algo, modeLabel));
+          const algoKey = ALGORITHMS[algo]?.key;
+          if (algoKey === 'k2') {
+            exportBn(k2bn.train(dataset));
+          } else if (algoKey === 'nb') {
+            const ci = dataset.classIndex;
+            const structure = {};
+            dataset.attributes.forEach((_, i) => { structure[i] = i === ci ? [] : [ci]; });
+            exportBn({ attributes: dataset.attributes, structure });
+          } else if (algoKey === 'mlp') {
+            const m = mlp.train(dataset);
+            exportNn({ layerSizes: m.layerSizes, inputNames: m.inputNames, outputNames: m.outputNames, W1: m.W1, W2: m.W2 });
+          } else {
+            exportBn(null); exportNn(null);
+          }
         }
       } catch (e) {
         setOutput(`Error: ${e.message}`);
+        exportBn(null); exportNn(null);
       } finally {
         setRunning(false);
       }
@@ -193,6 +220,14 @@ export default function ClassifyTab({ dataset }) {
             {output || 'Results will appear here after running…'}
           </Box>
         </Paper>
+
+        {networkReady && (
+          <Box sx={{ mt: 1, textAlign: 'right' }}>
+            <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+              → Visualize tab → Network to explore the learned structure
+            </Typography>
+          </Box>
+        )}
       </Grid>
     </Grid>
   );

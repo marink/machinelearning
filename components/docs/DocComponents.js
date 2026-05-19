@@ -243,7 +243,7 @@ function TheoremBox({ type, n, children }) {
       borderLeft: `3px solid ${s.border}`,
       bgcolor: s.bg,
     }}>
-      <Typography sx={{ fontSize: 14.5, lineHeight: 1.8, color: '#1d1d1f' }}>
+      <Typography component="div" sx={{ fontSize: 14.5, lineHeight: 1.8, color: '#1d1d1f' }}>
         <Box component="span" sx={{ fontWeight: 700, fontStyle: 'italic', color: s.labelColor, mr: 0.75 }}>
           {label}
         </Box>
@@ -263,7 +263,7 @@ export function Proposition({ n, children }) { return <TheoremBox type="proposit
 export function Proof({ children }) {
   return (
     <Box sx={{ my: 1.5, pl: 2.5, borderLeft: '2px solid rgba(0,0,0,0.1)' }}>
-      <Typography sx={{ fontSize: 13.5, color: 'rgba(0,0,0,0.65)', lineHeight: 1.85 }}>
+      <Typography component="div" sx={{ fontSize: 13.5, color: 'rgba(0,0,0,0.65)', lineHeight: 1.85 }}>
         <Box component="span" sx={{ fontStyle: 'italic', fontWeight: 600, color: 'rgba(0,0,0,0.45)', mr: 0.75 }}>
           Proof sketch.
         </Box>

@@ -8,6 +8,7 @@ const TOC = [
   { id: 'intro',    label: 'Introduction' },
   { id: 'book',     label: 'Book Examples' },
   { id: 'uci',      label: 'UCI Classics' },
+  { id: 'bn',       label: 'Bayesian Networks' },
 ];
 
 const DATASETS = [
@@ -93,6 +94,15 @@ const DATASETS = [
     sample: true,
   },
   {
+    group: 'bn',
+    name: 'Eczema / Atopic Dermatitis',
+    instances: 500, attrs: 7, task: 'Classification',
+    desc: 'Synthetic dataset forward-sampled from a 7-node Bayesian Network with a known causal structure: GeneticRisk + IrritantProducts → BrokenSkinBarrier; GeneticRisk + DustMiteExposure + HighSugarDiet → Th2Dysregulation; both → EczemaFlare. Designed for K2 structure learning — the true DAG is recoverable. ~25% positive (flare) class rate.',
+    arff: '/datasets/eczema.arff',
+    uci: null,
+    sample: true,
+  },
+  {
     group: 'uci',
     name: 'Adult (Census Income)',
     instances: 48842, attrs: 14, task: 'Classification',
@@ -154,6 +164,7 @@ function DatasetCard({ ds }) {
 export default function DatasetsPage() {
   const bookSets = DATASETS.filter(d => d.group === 'book');
   const uciSets  = DATASETS.filter(d => d.group === 'uci');
+  const bnSets   = DATASETS.filter(d => d.group === 'bn');
 
   return (
     <DocPage
@@ -194,6 +205,16 @@ export default function DatasetsPage() {
           </a>.
         </Para>
         {uciSets.map(ds => <DatasetCard key={ds.name} ds={ds} />)}
+      </Section>
+
+      <Section id="bn" title="Bayesian Networks">
+        <Para>
+          Synthetic datasets generated from known Bayesian Network structures.
+          Use these with the <a href="/docs/k2/" style={{ color: '#1565C0' }}>K2 algorithm</a> to
+          learn structure from data and compare the learned DAG against the true network in
+          the <a href="/builder/" style={{ color: '#1565C0' }}>BN Builder</a>.
+        </Para>
+        {bnSets.map(ds => <DatasetCard key={ds.name} ds={ds} />)}
       </Section>
     </DocPage>
   );

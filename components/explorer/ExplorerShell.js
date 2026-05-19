@@ -23,8 +23,9 @@ import ClusterTab from './ClusterTab';
 import VisualizeTab from './VisualizeTab';
 
 const SAMPLE_DATASETS = [
-  { label: 'Book examples', items: ['iris.arff', 'weather.arff', 'contact-lenses.arff', 'labor.arff'] },
-  { label: 'UCI classics',  items: ['diabetes.arff', 'vote.arff', 'glass.arff', 'ionosphere.arff', 'segment-challenge.arff'] },
+  { label: 'Book examples',    items: ['iris.arff', 'weather.arff', 'contact-lenses.arff', 'labor.arff'] },
+  { label: 'UCI classics',     items: ['diabetes.arff', 'vote.arff', 'glass.arff', 'ionosphere.arff', 'segment-challenge.arff'] },
+  { label: 'Bayesian Networks', items: ['eczema.arff'] },
 ];
 
 export default function ExplorerShell() {
@@ -35,6 +36,8 @@ export default function ExplorerShell() {
   const [restored, setRestored] = useState(false);
   const [recentFiles, setRecentFiles] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [bnExport, setBnExport] = useState(null);
+  const [nnExport, setNnExport] = useState(null);
   const fileRef = useRef();
 
   // Restore last session and populate recent list on mount
@@ -63,7 +66,7 @@ export default function ExplorerShell() {
     try {
       const text = await file.text();
       const ds = autoparse(text, file.name);
-      setDataset(ds);
+      setDataset(ds); setBnExport(null); setNnExport(null);
       setDsName(file.name);
       setError('');
       setRestored(false);
@@ -79,7 +82,7 @@ export default function ExplorerShell() {
       if (!res.ok) throw new Error(`Could not fetch ${name}`);
       const text = await res.text();
       const ds = autoparse(text, name);
-      setDataset(ds);
+      setDataset(ds); setBnExport(null); setNnExport(null);
       setDsName(name);
       setError('');
       setRestored(false);
@@ -95,7 +98,7 @@ export default function ExplorerShell() {
       const entry = await db.recent.get(name);
       if (entry) {
         const { attributes, instances, classIndex } = entry;
-        setDataset({ attributes, instances, classIndex });
+        setDataset({ attributes, instances, classIndex }); setBnExport(null); setNnExport(null);
         setDsName(name);
         setError('');
         setRestored(false);
@@ -223,9 +226,9 @@ export default function ExplorerShell() {
         )}
         {tab === 0 && <PreprocessTab dataset={dataset} />}
         {tab === 1 && <DataTab dataset={dataset} />}
-        {tab === 2 && <ClassifyTab dataset={dataset} />}
+        {tab === 2 && <ClassifyTab dataset={dataset} onBnExport={setBnExport} onNnExport={setNnExport} />}
         {tab === 3 && <ClusterTab dataset={dataset} />}
-        {tab === 4 && <VisualizeTab dataset={dataset} />}
+        {tab === 4 && <VisualizeTab dataset={dataset} bnExport={bnExport} nnExport={nnExport} />}
       </Box>
     </Box>
   );

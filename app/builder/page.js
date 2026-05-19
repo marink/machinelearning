@@ -331,6 +331,30 @@ export default function Builder() {
   const didDragRef = useRef(false);
   const [, rerender] = useReducer(x => x + 1, 0);
 
+  // Load a structure exported from the Explorer (K2 "View in Builder" button)
+  useEffect(() => {
+    const raw = typeof sessionStorage !== 'undefined' && sessionStorage.getItem('ml.bnImport');
+    if (!raw) return;
+    sessionStorage.removeItem('ml.bnImport');
+    try {
+      const { nodes: impNodes, edges: impEdges } = JSON.parse(raw);
+      const n = impNodes.length;
+      simNodesRef.current = impNodes.map((nd, i) => ({
+        id: nd.id, label: nd.label,
+        x: 350 + Math.cos((i / n) * 2 * Math.PI) * 160,
+        y: 280 + Math.sin((i / n) * 2 * Math.PI) * 160,
+      }));
+      setNodes(impNodes.map(nd => ({ ...nd })));
+      setEdges(impEdges.map(e => ({ ...e })));
+      setCpts({});
+      setEvidence({});
+      setResults(null);
+      setSelectedNodeId(null);
+      setEdgeFrom(null); setNewNode(null); setNewLabel('');
+      setMode('select');
+    } catch { /* malformed import — ignore */ }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     setCpts(prev => {
       const next = { ...prev };
